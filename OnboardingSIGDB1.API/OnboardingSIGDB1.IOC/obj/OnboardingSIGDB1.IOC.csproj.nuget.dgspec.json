@@ -1,0 +1,235 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj": {}
+  },
+  "projects": {
+    "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Data\\OnboardingSIGDB1.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Data\\OnboardingSIGDB1.Data.csproj",
+        "projectName": "OnboardingSIGDB1.Data",
+        "projectPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Data\\OnboardingSIGDB1.Data.csproj",
+        "packagesPath": "C:\\Users\\gabriela.almeida\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gabriela.almeida\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj": {
+                "projectPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[2.2.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "target": "Package",
+              "version": "[2.2.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[2.2.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[2.2.6, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj",
+        "projectName": "OnboardingSIGDB1.Domain",
+        "projectPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj",
+        "packagesPath": "C:\\Users\\gabriela.almeida\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gabriela.almeida\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.0.0, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[9.2.2, )"
+            },
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            },
+            "System.ComponentModel.Annotations": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj",
+        "projectName": "OnboardingSIGDB1.IOC",
+        "projectPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.IOC\\OnboardingSIGDB1.IOC.csproj",
+        "packagesPath": "C:\\Users\\gabriela.almeida\\.nuget\\packages\\",
+        "outputPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.IOC\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\gabriela.almeida\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netstandard2.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netstandard2.0": {
+            "projectReferences": {
+              "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Data\\OnboardingSIGDB1.Data.csproj": {
+                "projectPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Data\\OnboardingSIGDB1.Data.csproj"
+              },
+              "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj": {
+                "projectPath": "C:\\Projetos\\SENAC\\OnBoarding\\OnboardingSIGDB1\\OnboardingSIGDB1.API\\OnboardingSIGDB1.Domain\\OnboardingSIGDB1.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netstandard2.0": {
+          "dependencies": {
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "NETStandard.Library": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.0.3, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

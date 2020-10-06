@@ -1,0 +1,93 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using OnboardingSIGDB1.Domain.Dto;
+using OnboardingSIGDB1.Domain.Dto.Filtros;
+using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Interfaces.Services;
+
+namespace OnboardingSIGDB1.API.Controllers
+{
+    [Route("api/empresas")]
+    [ApiController]
+    public class EmpresaController : ControllerBase
+    {
+        private readonly IEmpresaService _empresaService;
+        private readonly IMapper _mapper;
+
+        public EmpresaController(IEmpresaService empresaService,
+            IMapper mapper)
+        {
+            _empresaService = empresaService;
+            _mapper = mapper;
+        }
+        /// <summary>
+        /// GET api/empresas
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var empresas = await _empresaService.GetAll();
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)));
+        }
+
+        /// <summary>
+        /// GET api/empresas/5
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(long id)
+        {
+            var empresa = await _empresaService.GetById(id);
+            return Content(JsonConvert.SerializeObject(_mapper.Map<EmpresaDto>(empresa)));
+        }
+
+        [HttpGet("pesquisar")]
+        public async Task<IActionResult> Get([FromQuery] EmpresaFiltroDto filtro)
+        {
+            var empresas = await _empresaService.GetFiltro(filtro);
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)));
+        }
+
+
+        /// <summary>
+        /// POST api/empresas
+        /// </summary>
+        /// <param name="empresa"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] EmpresaInsertDto empresa)
+        {
+            var entity = _mapper.Map<Empresa>(empresa);
+            await _empresaService.InsertEmpresa(entity);
+            return Ok();
+        }
+
+        /// <summary>
+        /// PUT api/empresas/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="empresa"></param>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(long id, [FromBody] EmpresaUpdateDto empresa)
+        {
+            var entity = _mapper.Map<Empresa>(empresa);
+            await _empresaService.UpdateEmpresa(id, entity);
+            return Ok();
+        }
+
+        /// <summary>
+        /// DELETE api/empresas/5
+        /// </summary>
+        /// <param name="id"></param>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _empresaService.Delete(id);
+            return Ok();
+        }
+    }
+}

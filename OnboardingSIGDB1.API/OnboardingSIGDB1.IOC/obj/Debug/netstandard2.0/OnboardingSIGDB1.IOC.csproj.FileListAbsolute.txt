@@ -1,0 +1,14 @@
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.IOC.deps.json
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.IOC.dll
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.IOC.pdb
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.AssemblyInfoInputs.cache
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.AssemblyInfo.cs
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.dll
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.pdb
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.csprojAssemblyReference.cache
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.csproj.CoreCompileInputs.cache
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.Data.dll
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.Domain.dll
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.Data.pdb
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\bin\Debug\netstandard2.0\OnboardingSIGDB1.Domain.pdb
+C:\Projetos\SENAC\OnBoarding\OnboardingSIGDB1\OnboardingSIGDB1.API\OnboardingSIGDB1.IOC\obj\Debug\netstandard2.0\OnboardingSIGDB1.IOC.csproj.CopyComplete
