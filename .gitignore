@@ -1,0 +1,9 @@
+
+*.dll
+*.pdb
+OnboardingSIGDB1.API/.vs/OnboardingSIGDB1.API/v16/.suo
+*.xml
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/bin/Debug/netcoreapp2.2/netcoreapp2.2/OnboardingSIGDB1.API.dll
+OnboardingSIGDB1.API/OnboardingSIGDB1.IOC/obj/project.assets.json
+*.cache
+OnboardingSIGDB1.API/OnboardingSIGDB1.Domain/obj/project.assets.json
