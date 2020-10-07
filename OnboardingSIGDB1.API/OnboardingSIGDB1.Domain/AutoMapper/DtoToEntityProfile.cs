@@ -19,7 +19,10 @@ namespace OnboardingSIGDB1.Domain.AutoMapper
               .ConvertUsing(c => new Funcionario(c.Nome, c.Cpf.RemoveMaskCpf(), c.DataContratacao));
             CreateMap<FuncionarioUpdateDto, Funcionario>();
             CreateMap<FuncionarioInsertDto, Funcionario>()
-                .ConvertUsing(c => new Funcionario(c.Nome, c.Cpf.RemoveMaskCpf(), c.DataContratacao)); ;
+                .ConvertUsing(c => new Funcionario(c.Nome, c.Cpf.RemoveMaskCpf(), c.DataContratacao));
+
+            CreateMap<CargoDto, Cargo>();
+            CreateMap<CargoInsertUpdateDto, Cargo>();
 
         }
     }

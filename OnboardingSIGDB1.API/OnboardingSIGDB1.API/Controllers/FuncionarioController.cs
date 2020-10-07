@@ -15,12 +15,15 @@ namespace OnboardingSIGDB1.API.Controllers
     public class FuncionarioController : ControllerBase
     {
         private readonly IFuncionarioService _funcionarioService;
+        private readonly IVinculacaoFuncionarioEmpresaService _vinculacaoFuncionarioEmpresaService;
         private readonly IMapper _mapper;
 
         public FuncionarioController(IFuncionarioService funcionarioService,
+            IVinculacaoFuncionarioEmpresaService vinculacaoFuncionarioEmpresaService,
             IMapper mapper)
         {
             _funcionarioService = funcionarioService;
+            _vinculacaoFuncionarioEmpresaService = vinculacaoFuncionarioEmpresaService;
             _mapper = mapper;
         }
         /// <summary>
@@ -87,6 +90,19 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _funcionarioService.Delete(id);
+            return Ok();
+        }
+
+        /// <summary>
+        /// POST api/funcionarios/vincular/1/empresa/2
+        /// </summary>
+        /// <param name="funcionarioId"></param>
+        /// <param name="empresaId"></param>
+        /// <returns></returns>
+        [HttpPost("vincular/{funcionarioId}/empresa/{empresaId}")]
+        public async Task<IActionResult> Post(long funcionarioId, long empresaId)
+        {
+            await _vinculacaoFuncionarioEmpresaService.Vincular(funcionarioId, empresaId);
             return Ok();
         }
     }

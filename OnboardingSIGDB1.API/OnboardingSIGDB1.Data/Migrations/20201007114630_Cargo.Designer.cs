@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnboardingSIGDB1.Data;
 
 namespace OnboardingSIGDB1.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201007114630_Cargo")]
+    partial class Cargo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,25 +69,13 @@ namespace OnboardingSIGDB1.Data.Migrations
 
                     b.Property<DateTime?>("DataContratacao");
 
-                    b.Property<long?>("EmpresaId");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(150);
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmpresaId");
-
                     b.ToTable("Funcionario");
-                });
-
-            modelBuilder.Entity("OnboardingSIGDB1.Domain.Entitys.Funcionario", b =>
-                {
-                    b.HasOne("OnboardingSIGDB1.Domain.Entitys.Empresa", "Empresa")
-                        .WithMany("Funcionarios")
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

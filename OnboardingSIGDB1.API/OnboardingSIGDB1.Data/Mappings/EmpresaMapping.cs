@@ -10,7 +10,7 @@ namespace OnboardingSIGDB1.Data.Mappings
         {
             builder
                 .ToTable("Empresa");
-            
+
             builder
                 .HasKey(p => p.Id);
 
@@ -18,7 +18,7 @@ namespace OnboardingSIGDB1.Data.Mappings
                 .Property(p => p.Cnpj)
                 .IsRequired()
                 .HasMaxLength(14);
-            
+
             builder
                 .Property(p => p.Nome)
                 .IsRequired()

@@ -23,6 +23,12 @@ namespace OnboardingSIGDB1.Data.Mappings
                 .Property(p => p.Nome)
                 .IsRequired()
                 .HasMaxLength(150);
+
+            builder
+                .HasOne(p => p.Empresa)
+                .WithMany(e => e.Funcionarios)
+                .HasForeignKey(p => p.EmpresaId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

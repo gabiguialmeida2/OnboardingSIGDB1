@@ -6,3 +6,4 @@
         public const string TamanhoString = "O campo {0} deve ter tamanhos entre {1} e {2}";
     }
 }
+

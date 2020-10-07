@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Entitys;
-using System.Collections.Generic;
 
 namespace OnboardingSIGDB1.Domain.AutoMapper
 {
@@ -11,6 +10,7 @@ namespace OnboardingSIGDB1.Domain.AutoMapper
         {
             CreateMap<Empresa, EmpresaDto>();
             CreateMap<Funcionario, FuncionarioDto>();
+            CreateMap<Cargo, CargoDto>();
         }
     }
 }

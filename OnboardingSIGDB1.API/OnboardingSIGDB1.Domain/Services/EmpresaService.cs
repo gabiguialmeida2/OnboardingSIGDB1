@@ -14,10 +14,10 @@ namespace OnboardingSIGDB1.Domain.Services
 {
     public class EmpresaService : IEmpresaService
     {
-        private readonly IRepository<Empresa> _empresaRepository;
+        private readonly IEmpresaRepository _empresaRepository;
         private readonly NotificationContext _notificationContext;
 
-        public EmpresaService(IRepository<Empresa> empresaRepository,
+        public EmpresaService(IEmpresaRepository empresaRepository,
             NotificationContext notificationContext)
         {
             _empresaRepository = empresaRepository;
@@ -105,9 +105,10 @@ namespace OnboardingSIGDB1.Domain.Services
         }
         public async Task Delete(long id)
         {
-            var empresaDatabase = await _empresaRepository.Get(emp => emp.Id == id);
+            var empresaDatabase = (await _empresaRepository.GetWithFuncionarios(emp => emp.Id == id)).FirstOrDefault();
 
-            ValidExistEmpresa(empresaDatabase.FirstOrDefault());
+            ValidExistEmpresa(empresaDatabase);
+            ValidEmpresaPossuiFuncionarios(empresaDatabase);
 
             if (_notificationContext.HasNotifications)
                 return;
@@ -116,13 +117,25 @@ namespace OnboardingSIGDB1.Domain.Services
 
         }
 
+        private void ValidEmpresaPossuiFuncionarios(Empresa empresaDatabase)
+        {
+            if (empresaDatabase != null && 
+                empresaDatabase.Funcionarios != null && 
+                empresaDatabase.Funcionarios.Any())
+            {
+                _notificationContext.AddNotification(new Notification("EmpresaComFuncionarios",
+                   "Não é possível excluir empresa com funcionários vinculados"));
+            }
+        }
+
         private async Task ValidDuplication(Empresa empresa)
         {
             var empresas = await _empresaRepository.Get(emp => emp.Cnpj.Equals(empresa.Cnpj));
 
             if (empresas.Any())
             {
-                _notificationContext.AddNotification(new Notification("CnpjDuplicado", "Já existe uma empresa cadastrada com esse CNPJ"));
+                _notificationContext.AddNotification(new Notification("CnpjDuplicado",
+                    "Já existe uma empresa cadastrada com esse CNPJ"));
             }
         }
 
@@ -130,7 +143,8 @@ namespace OnboardingSIGDB1.Domain.Services
         {
             if (!empresa.Cnpj.IsCnpjValid())
             {
-                _notificationContext.AddNotification(new Notification("CnpjInvalido", "Insira um CNPJ válido"));
+                _notificationContext.AddNotification(new Notification("CnpjInvalido", 
+                    "Insira um CNPJ válido"));
             }
         }
 
@@ -138,7 +152,8 @@ namespace OnboardingSIGDB1.Domain.Services
         {
             if (empresaDatabase == null)
             {
-                _notificationContext.AddNotification(new Notification("EmpresaInexistente", "Não existe uma empresa para o Id informado"));
+                _notificationContext.AddNotification(new Notification("EmpresaInexistente", 
+                    "Não existe uma empresa para o Id informado"));
             }
         }
     }

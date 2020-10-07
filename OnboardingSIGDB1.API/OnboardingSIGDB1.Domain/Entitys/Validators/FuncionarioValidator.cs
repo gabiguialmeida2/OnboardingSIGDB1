@@ -13,7 +13,7 @@ namespace OnboardingSIGDB1.Domain.Entitys.Validators
                 .WithMessage(string.Format(MensagensErro.CampoObrigatorio, "Nome"));
 
             RuleFor(e => e.Nome)
-              .Length(1, 150)
+              .Length(0, 150)
               .WithMessage(string.Format(MensagensErro.TamanhoString, "Nome", 1, 150));
 
             RuleFor(e => e.Cpf)

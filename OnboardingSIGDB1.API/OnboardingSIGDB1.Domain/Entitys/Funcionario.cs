@@ -24,5 +24,7 @@ namespace OnboardingSIGDB1.Domain.Entitys
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public DateTime? DataContratacao { get; set; }
+        public long? EmpresaId { get; set; }
+        public Empresa Empresa { get; set; }
     }
 }

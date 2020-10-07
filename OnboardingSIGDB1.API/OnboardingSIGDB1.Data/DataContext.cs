@@ -18,12 +18,14 @@ namespace OnboardingSIGDB1.Data
 
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
+        public DbSet<Cargo> Cargos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Empresa>().Map();
             modelBuilder.Entity<Funcionario>().Map();
+            modelBuilder.Entity<Cargo>().Map();
         }
 
     }

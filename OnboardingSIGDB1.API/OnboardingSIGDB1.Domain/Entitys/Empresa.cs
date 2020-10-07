@@ -1,5 +1,6 @@
 ﻿using OnboardingSIGDB1.Domain.Entitys.Validators;
 using System;
+using System.Collections.Generic;
 
 namespace OnboardingSIGDB1.Domain.Entitys
 {
@@ -22,5 +23,6 @@ namespace OnboardingSIGDB1.Domain.Entitys
         public string Nome { get; set; }
         public string Cnpj { get; set; }
         public DateTime? DataFundacao { get; set; }
+        public IEnumerable<Funcionario> Funcionarios { get; set; }
     }
 }

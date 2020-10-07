@@ -40,7 +40,7 @@ namespace OnboardingSIGDB1.Data
         public async Task Update(T entity)
         {
             _unitOfWork.Context.Entry(entity).State = EntityState.Modified;
-            _unitOfWork.Context.Set<T>().Attach(entity);
+            _unitOfWork.Context.Set<T>().Update(entity);
             await _unitOfWork.Commit();
         }
 
