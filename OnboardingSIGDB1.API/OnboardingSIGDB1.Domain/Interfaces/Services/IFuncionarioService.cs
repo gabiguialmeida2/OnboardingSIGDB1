@@ -9,9 +9,5 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Services
     {
         Task InsertFuncionario(Funcionario funcionario);
         Task UpdateFuncionario(long id, Funcionario funcionario);
-        Task Delete(long id);
-        Task<IEnumerable<Funcionario>> GetAll();
-        Task<Funcionario> GetById(long id);
-        Task<IEnumerable<Funcionario>> GetFiltro(FuncionarioFiltroDto filtro);
     }
 }

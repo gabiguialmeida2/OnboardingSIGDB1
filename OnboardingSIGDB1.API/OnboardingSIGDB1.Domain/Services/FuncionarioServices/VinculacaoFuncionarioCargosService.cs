@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnboardingSIGDB1.Domain.Services
+namespace OnboardingSIGDB1.Domain.Services.FuncionarioServices
 {
     public class VinculacaoFuncionarioCargosService: IVinculacaoFuncionarioCargosService
     {

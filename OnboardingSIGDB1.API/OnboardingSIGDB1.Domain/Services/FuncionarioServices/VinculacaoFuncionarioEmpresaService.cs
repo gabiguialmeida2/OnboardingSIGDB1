@@ -5,7 +5,7 @@ using OnboardingSIGDB1.Domain.Notifications;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnboardingSIGDB1.Domain.Services
+namespace OnboardingSIGDB1.Domain.Services.FuncionarioServices
 {
     public class VinculacaoFuncionarioEmpresaService: IVinculacaoFuncionarioEmpresaService
     {

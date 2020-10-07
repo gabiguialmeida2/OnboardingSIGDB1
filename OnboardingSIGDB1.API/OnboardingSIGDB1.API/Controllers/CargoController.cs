@@ -15,14 +15,21 @@ namespace OnboardingSIGDB1.API.Controllers
     public class CargoController : ControllerBase
     {
         private readonly ICargoService _cargoService;
+        private readonly ICargoConsultaService _cargoConsultaService;
+        private readonly ICargoDeleteService _cargoDeleteService;
         private readonly IMapper _mapper;
 
-        public CargoController(ICargoService cargoService,
+        public CargoController(ICargoService cargoService, 
+            ICargoConsultaService cargoConsultaService, 
+            ICargoDeleteService cargoDeleteService, 
             IMapper mapper)
         {
             _cargoService = cargoService;
+            _cargoConsultaService = cargoConsultaService;
+            _cargoDeleteService = cargoDeleteService;
             _mapper = mapper;
         }
+
         /// <summary>
         /// GET api/cargos
         /// </summary>
@@ -30,7 +37,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var cargos = await _cargoService.GetAll();
+            var cargos = await _cargoConsultaService.GetAll();
             return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)),
                 "application/json");
         }
@@ -42,7 +49,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var cargo = await _cargoService.GetById(id);
+            var cargo = await _cargoConsultaService.GetById(id);
             return Content(JsonConvert.SerializeObject(_mapper.Map<CargoDto>(cargo)),
                 "application/json");
         }
@@ -54,7 +61,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] CargoFiltroDto filtro)
         {
-            var cargos = await _cargoService.GetFiltro(filtro);
+            var cargos = await _cargoConsultaService.GetFiltro(filtro);
             return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)),
                 "application/json");
         }
@@ -93,7 +100,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _cargoService.Delete(id);
+            await _cargoDeleteService.Delete(id);
             return Ok();
         }
     }

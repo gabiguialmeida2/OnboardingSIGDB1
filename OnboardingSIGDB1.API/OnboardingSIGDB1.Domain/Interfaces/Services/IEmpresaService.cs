@@ -1,6 +1,4 @@
-﻿using OnboardingSIGDB1.Domain.Dto.Filtros;
-using OnboardingSIGDB1.Domain.Entitys;
-using System.Collections.Generic;
+﻿using OnboardingSIGDB1.Domain.Entitys;
 using System.Threading.Tasks;
 
 namespace OnboardingSIGDB1.Domain.Interfaces.Services
@@ -9,9 +7,5 @@ namespace OnboardingSIGDB1.Domain.Interfaces.Services
     {
         Task InsertEmpresa(Empresa empresa);
         Task UpdateEmpresa(long id, Empresa empresa);
-        Task Delete(long id);
-        Task<IEnumerable<Empresa>> GetAll();
-        Task<Empresa> GetById(long id);
-        Task<IEnumerable<Empresa>> GetFiltro(EmpresaFiltroDto filtro);
     }
 }

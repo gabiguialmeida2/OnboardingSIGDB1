@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace OnboardingSIGDB1.Domain.Interfaces.Services
 {
-    public interface ICargoService
+    public interface IEmpresaConsultaService
     {
-        Task InsertCargo(Cargo cargo);
-        Task UpdateCargo(long id, Cargo cargo);
+        Task<IEnumerable<Empresa>> GetAll();
+        Task<Empresa> GetById(long id);
+        Task<IEnumerable<Empresa>> GetFiltro(EmpresaFiltroDto filtro);
     }
 }

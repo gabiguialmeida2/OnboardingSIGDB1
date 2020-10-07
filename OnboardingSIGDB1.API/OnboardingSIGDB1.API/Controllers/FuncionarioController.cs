@@ -16,20 +16,28 @@ namespace OnboardingSIGDB1.API.Controllers
     public class FuncionarioController : ControllerBase
     {
         private readonly IFuncionarioService _funcionarioService;
+        private readonly IFuncionarioDeleteService _funcionarioDeleteService;
+        private readonly IFuncionarioConsultaService _funcionarioConsultaService;
         private readonly IVinculacaoFuncionarioEmpresaService _vinculacaoFuncionarioEmpresaService;
         private readonly IVinculacaoFuncionarioCargosService _vinculacaoFuncionarioCargosService;
+
         private readonly IMapper _mapper;
 
-        public FuncionarioController(IFuncionarioService funcionarioService,
-            IVinculacaoFuncionarioEmpresaService vinculacaoFuncionarioEmpresaService,
-            IVinculacaoFuncionarioCargosService vinculacaoFuncionarioCargosService,
+        public FuncionarioController(IFuncionarioService funcionarioService, 
+            IFuncionarioDeleteService funcionarioDeleteService, 
+            IFuncionarioConsultaService funcionarioConsultaService, 
+            IVinculacaoFuncionarioEmpresaService vinculacaoFuncionarioEmpresaService, 
+            IVinculacaoFuncionarioCargosService vinculacaoFuncionarioCargosService, 
             IMapper mapper)
         {
             _funcionarioService = funcionarioService;
+            _funcionarioDeleteService = funcionarioDeleteService;
+            _funcionarioConsultaService = funcionarioConsultaService;
             _vinculacaoFuncionarioEmpresaService = vinculacaoFuncionarioEmpresaService;
             _vinculacaoFuncionarioCargosService = vinculacaoFuncionarioCargosService;
             _mapper = mapper;
         }
+
         /// <summary>
         /// GET api/funcionarios
         /// </summary>
@@ -37,7 +45,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var funcionarios = await _funcionarioService.GetAll();
+            var funcionarios = await _funcionarioConsultaService.GetAll();
             return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)),
                 "application/json");
         }
@@ -49,7 +57,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var funcionario = await _funcionarioService.GetById(id);
+            var funcionario = await _funcionarioConsultaService.GetById(id);
             return Content(JsonConvert.SerializeObject(_mapper.Map<FuncionarioDto>(funcionario)),
                 "application/json");
         }
@@ -57,7 +65,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] FuncionarioFiltroDto filtro)
         {
-            var funcionarios = await _funcionarioService.GetFiltro(filtro);
+            var funcionarios = await _funcionarioConsultaService.GetFiltro(filtro);
             return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)),
                 "application/json");
         }
@@ -96,7 +104,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _funcionarioService.Delete(id);
+            await _funcionarioDeleteService.Delete(id);
             return Ok();
         }
 

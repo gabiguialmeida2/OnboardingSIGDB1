@@ -15,14 +15,23 @@ namespace OnboardingSIGDB1.API.Controllers
     public class EmpresaController : ControllerBase
     {
         private readonly IEmpresaService _empresaService;
+        private readonly IEmpresaConsultaService _empresaConsultaService;
+        private readonly IEmpresaDeleteService _empresaDeleteService;
+        
         private readonly IMapper _mapper;
 
-        public EmpresaController(IEmpresaService empresaService,
+        public EmpresaController(IEmpresaService empresaService, 
+            IEmpresaConsultaService empresaConsultaService, 
+            IEmpresaDeleteService empresaDeleteService, 
             IMapper mapper)
         {
             _empresaService = empresaService;
+            _empresaConsultaService = empresaConsultaService;
+            _empresaDeleteService = empresaDeleteService;
             _mapper = mapper;
         }
+
+
         /// <summary>
         /// GET api/empresas
         /// </summary>
@@ -30,7 +39,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var empresas = await _empresaService.GetAll();
+            var empresas = await _empresaConsultaService.GetAll();
             return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)),
                 "application/json"); 
         }
@@ -42,7 +51,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var empresa = await _empresaService.GetById(id);
+            var empresa = await _empresaConsultaService.GetById(id);
             return Content(JsonConvert.SerializeObject(_mapper.Map<EmpresaDto>(empresa)),
                 "application/json");
         }
@@ -55,7 +64,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] EmpresaFiltroDto filtro)
         {
-            var empresas = await _empresaService.GetFiltro(filtro);
+            var empresas = await _empresaConsultaService.GetFiltro(filtro);
             return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)),
                 "application/json");
         }
@@ -94,7 +103,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _empresaService.Delete(id);
+            await _empresaDeleteService.Delete(id);
             return Ok();
         }
     }
