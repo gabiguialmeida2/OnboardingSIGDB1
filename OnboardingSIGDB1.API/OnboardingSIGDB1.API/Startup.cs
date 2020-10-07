@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
+using Newtonsoft.Json;
 using OnboardingSIGDB1.API.Filters;
 using OnboardingSIGDB1.Data;
 using OnboardingSIGDB1.Domain.AutoMapper;
@@ -40,7 +41,11 @@ namespace OnboardingSIGDB1.API
                 .ConfigureMapper();
 
             services.AddMvc(options => options.Filters.Add<NotificationFilter>())
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.Formatting = Formatting.Indented;
+                }); ;
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo

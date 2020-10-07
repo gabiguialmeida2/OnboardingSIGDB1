@@ -31,7 +31,8 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Get()
         {
             var cargos = await _cargoService.GetAll();
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)),
+                "application/json");
         }
 
         /// <summary>
@@ -42,14 +43,20 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Get(long id)
         {
             var cargo = await _cargoService.GetById(id);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<CargoDto>(cargo)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<CargoDto>(cargo)),
+                "application/json");
         }
 
+        /// <summary>
+        /// GET api/cargos/pesquisar
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] CargoFiltroDto filtro)
         {
             var cargos = await _cargoService.GetFiltro(filtro);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)),
+                "application/json");
         }
 
 

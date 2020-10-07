@@ -26,5 +26,6 @@ namespace OnboardingSIGDB1.Domain.Entitys
         public DateTime? DataContratacao { get; set; }
         public long? EmpresaId { get; set; }
         public Empresa Empresa { get; set; }
+        public IEnumerable<FuncionarioCargo> FuncionarioCargos { get; set; }
     }
 }

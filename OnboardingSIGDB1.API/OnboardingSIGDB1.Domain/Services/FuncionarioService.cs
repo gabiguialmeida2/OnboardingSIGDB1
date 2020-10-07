@@ -14,10 +14,10 @@ namespace OnboardingSIGDB1.Domain.Services
 {
     public class FuncionarioService: IFuncionarioService
     {
-        private readonly IRepository<Funcionario> _funcionarioRepository;
+        private readonly IFuncionarioRepository _funcionarioRepository;
         private readonly NotificationContext _notificationContext;
 
-        public FuncionarioService(IRepository<Funcionario> funcionarioRepository,
+        public FuncionarioService(IFuncionarioRepository funcionarioRepository,
             NotificationContext notificationContext)
         {
             _funcionarioRepository = funcionarioRepository;
@@ -25,12 +25,12 @@ namespace OnboardingSIGDB1.Domain.Services
         }
         public async Task<IEnumerable<Funcionario>> GetAll()
         {
-            return await _funcionarioRepository.Get();
+            return await _funcionarioRepository.GetWithIncludes(f => true);
         }
 
         public async Task<Funcionario> GetById(long id)
         {
-            var funcionarios = await _funcionarioRepository.Get(emp => emp.Id == id);
+            var funcionarios = await _funcionarioRepository.GetWithIncludes(emp => emp.Id == id);
             return funcionarios.FirstOrDefault();
         }
 
@@ -60,7 +60,7 @@ namespace OnboardingSIGDB1.Domain.Services
                     && emp.DataContratacao.Value.Date <= filtro.DataContratacaoFim.Value.Date);
             }
 
-            var funcionarios = await _funcionarioRepository.Get(ExpressionConcatenation.And(filtros.ToArray()));
+            var funcionarios = await _funcionarioRepository.GetWithIncludes(ExpressionConcatenation.And(filtros.ToArray()));
             return funcionarios;
         }
 

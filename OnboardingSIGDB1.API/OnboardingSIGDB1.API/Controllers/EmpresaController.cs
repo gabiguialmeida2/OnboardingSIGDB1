@@ -31,7 +31,8 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Get()
         {
             var empresas = await _empresaService.GetAll();
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)),
+                "application/json"); 
         }
 
         /// <summary>
@@ -42,14 +43,21 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Get(long id)
         {
             var empresa = await _empresaService.GetById(id);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<EmpresaDto>(empresa)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<EmpresaDto>(empresa)),
+                "application/json");
         }
 
+        /// <summary>
+        /// GET api/empresas/pesquisar
+        /// </summary>
+        /// <param name="filtro"></param>
+        /// <returns></returns>
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] EmpresaFiltroDto filtro)
         {
             var empresas = await _empresaService.GetFiltro(filtro);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)),
+                "application/json");
         }
 
 

@@ -7,6 +7,6 @@ namespace OnboardingSIGDB1.Domain.Interfaces
 {
     public interface IFuncionarioRepository: IRepository<Funcionario>
     {
-        Task<IEnumerable<Funcionario>> GetWithEmpresa(Predicate<Funcionario> predicate);
+        Task<IEnumerable<Funcionario>> GetWithIncludes(Predicate<Funcionario> predicate);
     }
 }

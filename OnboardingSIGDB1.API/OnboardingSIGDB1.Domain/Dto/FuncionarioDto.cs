@@ -10,5 +10,7 @@ namespace OnboardingSIGDB1.Domain.Dto
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public DateTime? DataContratacao { get; set; }
+        public EmpresaDto Empresa { get; set; }
+        public List<FuncionarioCargoDto> FuncionarioCargos { get; set; }
     }
 }

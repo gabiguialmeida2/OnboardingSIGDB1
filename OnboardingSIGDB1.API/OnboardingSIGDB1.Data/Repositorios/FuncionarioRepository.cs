@@ -16,12 +16,14 @@ namespace OnboardingSIGDB1.Data.Repositorios
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Funcionario>> GetWithEmpresa(Predicate<Funcionario> predicate)
+        public async Task<IEnumerable<Funcionario>> GetWithIncludes(Predicate<Funcionario> predicate)
         {
             return await _unitOfWork
                 .Context
                 .Funcionarios
                 .Include(f => f.Empresa)
+                .Include(f => f.FuncionarioCargos)
+                    .ThenInclude(c=>c.Cargo)
                 .Where(f => predicate(f)).ToListAsync();
         }
     }

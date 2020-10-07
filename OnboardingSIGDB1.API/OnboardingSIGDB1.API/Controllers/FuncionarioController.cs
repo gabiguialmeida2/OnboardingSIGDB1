@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,17 @@ namespace OnboardingSIGDB1.API.Controllers
     {
         private readonly IFuncionarioService _funcionarioService;
         private readonly IVinculacaoFuncionarioEmpresaService _vinculacaoFuncionarioEmpresaService;
+        private readonly IVinculacaoFuncionarioCargosService _vinculacaoFuncionarioCargosService;
         private readonly IMapper _mapper;
 
         public FuncionarioController(IFuncionarioService funcionarioService,
             IVinculacaoFuncionarioEmpresaService vinculacaoFuncionarioEmpresaService,
+            IVinculacaoFuncionarioCargosService vinculacaoFuncionarioCargosService,
             IMapper mapper)
         {
             _funcionarioService = funcionarioService;
             _vinculacaoFuncionarioEmpresaService = vinculacaoFuncionarioEmpresaService;
+            _vinculacaoFuncionarioCargosService = vinculacaoFuncionarioCargosService;
             _mapper = mapper;
         }
         /// <summary>
@@ -34,7 +38,8 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Get()
         {
             var funcionarios = await _funcionarioService.GetAll();
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)),
+                "application/json");
         }
 
         /// <summary>
@@ -45,14 +50,16 @@ namespace OnboardingSIGDB1.API.Controllers
         public async Task<IActionResult> Get(long id)
         {
             var funcionario = await _funcionarioService.GetById(id);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<FuncionarioDto>(funcionario)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<FuncionarioDto>(funcionario)),
+                "application/json");
         }
 
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] FuncionarioFiltroDto filtro)
         {
             var funcionarios = await _funcionarioService.GetFiltro(filtro);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)));
+            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)),
+                "application/json");
         }
 
 
@@ -100,9 +107,23 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="empresaId"></param>
         /// <returns></returns>
         [HttpPost("vincular/{funcionarioId}/empresa/{empresaId}")]
-        public async Task<IActionResult> Post(long funcionarioId, long empresaId)
+        public async Task<IActionResult> VincularEmpresa(long funcionarioId, long empresaId)
         {
             await _vinculacaoFuncionarioEmpresaService.Vincular(funcionarioId, empresaId);
+            return Ok();
+        }
+
+        /// <summary>
+        /// POST api/funcionarios/vincular/1/cargo/2
+        /// </summary>
+        /// <param name="funcionarioId"></param>
+        /// <param name="cargoId"></param>
+        /// <param name="dataVinculacao"></param>
+        /// <returns></returns>
+        [HttpPost("vincular/{funcionarioId}/cargo/{cargoId}/data/{dataVinculacao}")]
+        public async Task<IActionResult> VincularCargo(long funcionarioId, long cargoId, DateTime dataVinculacao)
+        {
+            await _vinculacaoFuncionarioCargosService.Vincular(funcionarioId, cargoId, dataVinculacao);
             return Ok();
         }
     }

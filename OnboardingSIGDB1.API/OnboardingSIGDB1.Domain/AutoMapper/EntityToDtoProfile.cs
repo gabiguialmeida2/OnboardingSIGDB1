@@ -11,6 +11,7 @@ namespace OnboardingSIGDB1.Domain.AutoMapper
             CreateMap<Empresa, EmpresaDto>();
             CreateMap<Funcionario, FuncionarioDto>();
             CreateMap<Cargo, CargoDto>();
+            CreateMap<FuncionarioCargo, FuncionarioCargoDto>();
         }
     }
 }

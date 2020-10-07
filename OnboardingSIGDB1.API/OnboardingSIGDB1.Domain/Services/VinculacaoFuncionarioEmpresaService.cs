@@ -23,7 +23,7 @@ namespace OnboardingSIGDB1.Domain.Services
         {
             var funcionario = (
                 await _funcionarioRepository
-                .GetWithEmpresa(f => f.Id == funcionarioId)
+                .GetWithIncludes(f => f.Id == funcionarioId)
                 ).FirstOrDefault();
 
             ValidFuncionarioPossuiEmpresa(funcionario);

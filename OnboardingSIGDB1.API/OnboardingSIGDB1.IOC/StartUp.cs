@@ -25,7 +25,10 @@ namespace OnboardingSIGDB1.IOC
             services.AddScoped(typeof(IFuncionarioService), typeof(FuncionarioService));
             services.AddScoped(typeof(ICargoService), typeof(CargoService));
             services.AddScoped(typeof(IVinculacaoFuncionarioEmpresaService), typeof(VinculacaoFuncionarioEmpresaService));
+            services.AddScoped(typeof(IVinculacaoFuncionarioCargosService), typeof(VinculacaoFuncionarioCargosService));
             
+
+
             return services;
         }
     }
