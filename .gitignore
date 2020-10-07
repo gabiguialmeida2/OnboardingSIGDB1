@@ -338,3 +338,13 @@ coverage.opencover.xml
 /.vscode
 /.local
 */**/*local*
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/OnboardingSIGDB1.API.csproj.user
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/project.nuget.cache
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/project.assets.json
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/OnboardingSIGDB1.API.csproj.nuget.dgspec.json
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/Debug/netcoreapp2.2/OnboardingSIGDB1.API.pdb
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/Debug/netcoreapp2.2/OnboardingSIGDB1.API.dll
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/Debug/netcoreapp2.2/OnboardingSIGDB1.API.csprojAssemblyReference.cache
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/Debug/netcoreapp2.2/OnboardingSIGDB1.API.csproj.FileListAbsolute.txt
+OnboardingSIGDB1.API/OnboardingSIGDB1.API/obj/Debug/netcoreapp2.2/OnboardingSIGDB1.API.csproj.CoreCompileInputs.cache
+OnboardingSIGDB1.API/.vs/OnboardingSIGDB1.API/v16/.suo
