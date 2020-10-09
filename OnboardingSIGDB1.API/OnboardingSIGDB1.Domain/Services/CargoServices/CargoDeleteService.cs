@@ -9,7 +9,7 @@ namespace OnboardingSIGDB1.Domain.Services.CargoServices
 {
     public class CargoDeleteService : CargoValidationService, ICargoDeleteService
     {
-        public CargoDeleteService(IRepository<Cargo> cargoRepository,
+        public CargoDeleteService(ICargoRepository cargoRepository,
             NotificationContext notificationContext) 
             : base(cargoRepository, notificationContext)
         {
@@ -18,9 +18,10 @@ namespace OnboardingSIGDB1.Domain.Services.CargoServices
 
         public async Task Delete(long id)
         {
-            var cargoDatabase = await _cargoRepository.Get(cargo => cargo.Id == id);
+            var cargoDatabase = await ((ICargoRepository)_cargoRepository).GetWithIncludes(cargo => cargo.Id == id);
 
             ValidExistCargo(cargoDatabase.FirstOrDefault());
+            ValidCargoComFuncionario(cargoDatabase.FirstOrDefault());
 
             if (_notificationContext.HasNotifications)
                 return;

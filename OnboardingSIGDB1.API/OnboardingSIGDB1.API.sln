@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.API", "OnboardingSIGDB1.API\OnboardingSIGDB1.API.csproj", "{8A0AF61E-1B40-4AE5-B2A0-60D0CC85019D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingSIGDB1.API", "OnboardingSIGDB1.API\OnboardingSIGDB1.API.csproj", "{8A0AF61E-1B40-4AE5-B2A0-60D0CC85019D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Data", "OnboardingSIGDB1.Data\OnboardingSIGDB1.Data.csproj", "{1EF973DE-9AAB-4E55-8083-297630694B3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingSIGDB1.Data", "OnboardingSIGDB1.Data\OnboardingSIGDB1.Data.csproj", "{1EF973DE-9AAB-4E55-8083-297630694B3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Domain", "OnboardingSIGDB1.Domain\OnboardingSIGDB1.Domain.csproj", "{5772413C-09B0-45DB-A08D-F2873B04F229}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingSIGDB1.Domain", "OnboardingSIGDB1.Domain\OnboardingSIGDB1.Domain.csproj", "{5772413C-09B0-45DB-A08D-F2873B04F229}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.IOC", "OnboardingSIGDB1.IOC\OnboardingSIGDB1.IOC.csproj", "{32F6BD77-F816-4A29-A7A9-35BB7C8B1FE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnboardingSIGDB1.IOC", "OnboardingSIGDB1.IOC\OnboardingSIGDB1.IOC.csproj", "{32F6BD77-F816-4A29-A7A9-35BB7C8B1FE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnboardingSIGDB1.Domain.Tests", "OnboardingSIGDB1.Domain.Tests\OnboardingSIGDB1.Domain.Tests.csproj", "{F2998F6E-2504-42D0-A677-3AE408EF576C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{32F6BD77-F816-4A29-A7A9-35BB7C8B1FE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F6BD77-F816-4A29-A7A9-35BB7C8B1FE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F6BD77-F816-4A29-A7A9-35BB7C8B1FE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2998F6E-2504-42D0-A677-3AE408EF576C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2998F6E-2504-42D0-A677-3AE408EF576C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2998F6E-2504-42D0-A677-3AE408EF576C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2998F6E-2504-42D0-A677-3AE408EF576C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

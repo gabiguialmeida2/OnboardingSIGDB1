@@ -24,7 +24,7 @@ namespace OnboardingSIGDB1.Domain.Services.FuncionarioServices
 
             if (funcionarios.Any())
             {
-                _notificationContext.AddNotification(new Notification("CnpjDuplicado", 
+                _notificationContext.AddNotification(new Notification("CpfDuplicado", 
                     "Já existe um funcionario cadastrado com esse CPF"));
             }
         }

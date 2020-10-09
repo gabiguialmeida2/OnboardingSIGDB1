@@ -3,7 +3,6 @@ using OnboardingSIGDB1.Data;
 using OnboardingSIGDB1.Data.Repositorios;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Services;
-using OnboardingSIGDB1.Domain.Services;
 using OnboardingSIGDB1.Domain.Services.CargoServices;
 using OnboardingSIGDB1.Domain.Services.EmpresaServices;
 using OnboardingSIGDB1.Domain.Services.FuncionarioServices;
@@ -18,6 +17,7 @@ namespace OnboardingSIGDB1.IOC
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IFuncionarioRepository), typeof(FuncionarioRepository));
             services.AddScoped(typeof(IEmpresaRepository), typeof(EmpresaRepository));
+            services.AddScoped(typeof(ICargoRepository), typeof(CargoRepository));
             
             return services;
         }
