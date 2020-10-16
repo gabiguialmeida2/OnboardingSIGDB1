@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using OnboardingSIGDB1.Domain.Dto;
-using OnboardingSIGDB1.Domain.Dto.Filtros;
-using OnboardingSIGDB1.Domain.Entitys;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
+using OnboardingSIGDB1.Domain._Base;
+using OnboardingSIGDB1.Domain.Empresas;
+using OnboardingSIGDB1.Domain.Empresas.Dtos;
+using OnboardingSIGDB1.Domain.Empresas.Services;
+using OnboardingSIGDB1.Domain.Empresas.Specifications;
 
 namespace OnboardingSIGDB1.API.Controllers
 {
@@ -14,21 +15,23 @@ namespace OnboardingSIGDB1.API.Controllers
     [ApiController]
     public class EmpresaController : ControllerBase
     {
-        private readonly IEmpresaService _empresaService;
-        private readonly IEmpresaConsultaService _empresaConsultaService;
-        private readonly IEmpresaDeleteService _empresaDeleteService;
-        
+      
+        private readonly IConsultaBase<Empresa, EmpresaDto> _consultaBase;
+        private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
+        private readonly ExclusaoDeEmpresa _exclusaoDeEmpresa;
+
         private readonly IMapper _mapper;
 
-        public EmpresaController(IEmpresaService empresaService, 
-            IEmpresaConsultaService empresaConsultaService, 
-            IEmpresaDeleteService empresaDeleteService, 
-            IMapper mapper)
+        public EmpresaController(
+            IMapper mapper,
+            IConsultaBase<Empresa, EmpresaDto> consultaBase,
+            ArmazenadorDeEmpresa armazenadorDeEmpresa,
+            ExclusaoDeEmpresa exclusaoDeEmpresa)
         {
-            _empresaService = empresaService;
-            _empresaConsultaService = empresaConsultaService;
-            _empresaDeleteService = empresaDeleteService;
             _mapper = mapper;
+            _consultaBase = consultaBase;
+            _armazenadorDeEmpresa = armazenadorDeEmpresa;
+            _exclusaoDeEmpresa = exclusaoDeEmpresa;
         }
 
 
@@ -37,11 +40,14 @@ namespace OnboardingSIGDB1.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var empresas = await _empresaConsultaService.GetAll();
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)),
-                "application/json"); 
+            var empresa = _consultaBase
+               .Consultar(ListarEmpresaSpecificationBuilder.Novo()
+               .Build());
+
+            return Content(JsonConvert.SerializeObject(empresa),
+                "application/json");
         }
 
         /// <summary>
@@ -49,10 +55,16 @@ namespace OnboardingSIGDB1.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(long id)
+        public IActionResult Get(long id)
         {
-            var empresa = await _empresaConsultaService.GetById(id);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<EmpresaDto>(empresa)),
+            var empresa = _consultaBase
+                .Consultar(ListarEmpresaSpecificationBuilder.Novo()
+                .ComId(id)
+                .Build())
+                .Lista
+                .FirstOrDefault();
+
+            return Content(JsonConvert.SerializeObject(empresa),
                 "application/json");
         }
 
@@ -64,8 +76,15 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] EmpresaFiltroDto filtro)
         {
-            var empresas = await _empresaConsultaService.GetFiltro(filtro);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<EmpresaDto>>(empresas)),
+            var empresas = _consultaBase
+                 .Consultar(ListarEmpresaSpecificationBuilder.Novo()
+                 .ComCnpj(filtro.Cnpj)
+                 .ComDataFundacaoInicio(filtro.DataFundacaoInicio)
+                 .ComDataFundacaoFim(filtro.DataFundacaoFim)
+                 .ComNome(filtro.Nome)
+                 .Build());
+
+            return Content(JsonConvert.SerializeObject(empresas),
                 "application/json");
         }
 
@@ -76,10 +95,9 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="empresa"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EmpresaInsertDto empresa)
+        public async Task<IActionResult> Post([FromBody] EmpresaDto empresa)
         {
-            var entity = _mapper.Map<Empresa>(empresa);
-            await _empresaService.InsertEmpresa(entity);
+            await _armazenadorDeEmpresa.Armazenar(empresa);
             return Ok();
         }
 
@@ -89,10 +107,10 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="id"></param>
         /// <param name="empresa"></param>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] EmpresaUpdateDto empresa)
+        public async Task<IActionResult> Put(long id, [FromBody] EmpresaDto empresa)
         {
-            var entity = _mapper.Map<Empresa>(empresa);
-            await _empresaService.UpdateEmpresa(id, entity);
+            empresa.Id = id;
+            await _armazenadorDeEmpresa.Armazenar(empresa);
             return Ok();
         }
 
@@ -103,7 +121,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _empresaDeleteService.Delete(id);
+            await _exclusaoDeEmpresa.Excluir(id);
             return Ok();
         }
     }

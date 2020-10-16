@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Empresas;
 using OnboardingSIGDB1.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnboardingSIGDB1.Data.Repositorios
+namespace OnboardingSIGDB1.Data.Empresas.Repositorios
 {
     public class EmpresaRepository : Repository<Empresa>, IEmpresaRepository
     {

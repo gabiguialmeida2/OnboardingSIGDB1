@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Empresas\Dtos\EmpresaInsertDto.cs" />
+    <Compile Remove="Empresas\Dtos\EmpresaUpdateDto.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Atrributes\" />
     <Folder Include="Base\" />
   </ItemGroup>

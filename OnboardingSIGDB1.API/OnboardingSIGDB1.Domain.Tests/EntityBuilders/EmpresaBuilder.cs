@@ -1,46 +1,51 @@
 ﻿using Bogus;
+using Bogus.DataSets;
 using Bogus.Extensions.Brazil;
+using OnboardingSIGDB1.Domain.Empresas;
+using OnboardingSIGDB1.Domain.Empresas.Dtos;
 using OnboardingSIGDB1.Domain.Entitys;
+using System;
+using System.Collections.Generic;
 
 namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 {
     public class EmpresaBuilder
     {
-        private Empresa Empresa { get; set; }
+        private long _id;
+        private string _cnpj;
+        private string _nome;
+        private DateTime _data;
+        private IEnumerable<Funcionario> _funcionarios;
 
         public EmpresaBuilder()
         {
-            Empresa = new Faker<Empresa>("pt_BR")
-                .CustomInstantiator(f =>
-                    new Empresa()
-                    {
-                        Cnpj = f.Company.Cnpj(includeFormatSymbols: false),
-                        DataFundacao = f.Date.Past(),
-                        Nome = f.Company.CompanyName()
-                    });
+            var company = new Faker<Company>().Generate();
+            _cnpj = company.Cnpj(includeFormatSymbols: false);
+            _nome = company.CompanyName();
+            _data = new Faker("pt_BR").Date.Past();
         }
 
         public EmpresaBuilder WithId(long id)
         {
-            Empresa.Id = id;
+            _id = id;
             return this;
         }
 
         public EmpresaBuilder WithCnpj(string cnpj)
         {
-            Empresa.Cnpj = cnpj;
+            _cnpj = cnpj;
             return this;
         }
 
         public EmpresaBuilder WithNome(string nome)
         {
-            Empresa.Nome = nome;
+            _nome = nome;
             return this;
         }
 
         public EmpresaBuilder WithFuncionarios(int quantidade)
         {
-            Empresa.Funcionarios = new FuncionarioBuilder(quantidade)
+            _funcionarios = new FuncionarioBuilder(quantidade)
                 .BuildList();
 
             return this;
@@ -48,10 +53,20 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 
         public Empresa Build()
         {
-            return new Empresa(Empresa.Nome, Empresa.Cnpj, Empresa.DataFundacao)
+            var empresa = new Empresa(_id, _nome, _cnpj, _data);
+            empresa.AlterarFuncionarios(_funcionarios);
+
+            return empresa;
+        }
+
+        public EmpresaDto BuildDto(Empresa empresa)
+        {
+            return new EmpresaDto()
             {
-                Id = Empresa.Id,
-                Funcionarios = Empresa.Funcionarios
+                Cnpj = empresa.Cnpj,
+                DataFundacao = empresa.DataFundacao,
+                Id = empresa.Id,
+                Nome = empresa.Nome
             };
         }
 

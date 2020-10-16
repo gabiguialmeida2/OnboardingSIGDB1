@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Empresas;
+using OnboardingSIGDB1.Domain.Empresas.Dtos;
+using OnboardingSIGDB1.Domain.Empresas.Services;
+using OnboardingSIGDB1.Domain.Empresas.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.EmpresaServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,11 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
     {
         private readonly Mock<IEmpresaRepository> _empresaRepository;
         private readonly NotificationContext _notificationContext;
+        private readonly Mock<IValidadorDeCnpj> _validadorDeCnpj;
+        private readonly Mock<IValidadorDeEmpresaDuplicada> _validadorDeEmpresaDuplicada;
+        private readonly Mock<IValidadorDeEmpresaExistente> _validadorDeEmpresaExistente;
 
-        private readonly IEmpresaService _empresaService;
+        private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
 
         public EmpresaServiceTest()
         {
@@ -26,8 +30,11 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
             _empresaRepository = new Mock<IEmpresaRepository>();
             _notificationContext = new NotificationContext();
 
-            _empresaService = new EmpresaService(_empresaRepository.Object,
-                _notificationContext);
+            _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepository.Object,
+                _notificationContext,
+                _validadorDeCnpj.Object,
+                _validadorDeEmpresaDuplicada.Object,
+                _validadorDeEmpresaExistente.Object);
         }
 
         [Theory(DisplayName = "Inserir empresa nome invalido")]
@@ -37,8 +44,9 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
         {
             var builder = new EmpresaBuilder().WithNome(nome);
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
-            await VerifyInsertEmpresa(empresa);
+            await VerifyInsertEmpresa(empresaDto, empresa);
         }
 
         [Theory(DisplayName = "Inserir empresa cnpj tamanho invalido")]
@@ -48,13 +56,14 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
         {
             var builder = new EmpresaBuilder().WithCnpj(cnpj);
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
-            await VerifyInsertEmpresa(empresa);
+            await VerifyInsertEmpresa(empresaDto, empresa);
         }
 
-        private async Task VerifyInsertEmpresa(Empresa empresa)
+        private async Task VerifyInsertEmpresa(EmpresaDto empresaDto, Empresa empresa)
         {
-            await _empresaService.InsertEmpresa(empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             _empresaRepository.Verify(r => r.Add(empresa), Times.Never);
             Assert.False(empresa.Valid);
@@ -66,8 +75,9 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
         {
             var builder = new EmpresaBuilder().WithCnpj("12345678910111");
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
-            await _empresaService.InsertEmpresa(empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             _empresaRepository.Verify(r => r.Add(empresa), Times.Never);
 
@@ -84,19 +94,20 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
         {
             var builder = new EmpresaBuilder();
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
             _empresaRepository
                .Setup(c => c.Get(It.IsAny<Predicate<Empresa>>()))
                .ReturnsAsync(new List<Empresa>() { empresa });
 
-            await _empresaService.InsertEmpresa(empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             _empresaRepository.Verify(r => r.Add(empresa), Times.Never);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
 
-            Assert.Contains(_notificationContext.Notifications, 
+            Assert.Contains(_notificationContext.Notifications,
                 n => n.Key.Equals("CnpjDuplicado"));
         }
 
@@ -105,8 +116,9 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
         {
             var builder = new EmpresaBuilder();
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
-            await _empresaService.InsertEmpresa(empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             _empresaRepository.Verify(r => r.Add(empresa), Times.Once);
 
@@ -123,12 +135,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
                 .WithId(1);
 
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
             _empresaRepository
              .Setup(c => c.Get(It.IsAny<Predicate<Empresa>>()))
              .ReturnsAsync(new List<Empresa>() { empresa });
 
-            await _empresaService.UpdateEmpresa(1, empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -143,12 +156,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
                 .WithId(1);
 
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
             _empresaRepository
              .Setup(c => c.Get(It.IsAny<Predicate<Empresa>>()))
              .ReturnsAsync(new List<Empresa>() { });
 
-            await _empresaService.UpdateEmpresa(1, empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -166,12 +180,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
                 .WithId(1);
 
             var empresa = builder.Build();
+            var empresaDto = builder.BuildDto(empresa);
 
             _empresaRepository
              .Setup(c => c.Get(It.IsAny<Predicate<Empresa>>()))
              .ReturnsAsync(new List<Empresa>() { empresa });
 
-            await _empresaService.UpdateEmpresa(1, empresa);
+            await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
             Assert.False(_notificationContext.HasNotifications);
 

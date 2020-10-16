@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Empresas;
+using OnboardingSIGDB1.Domain.Empresas.Services;
+using OnboardingSIGDB1.Domain.Empresas.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.EmpresaServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -16,9 +16,11 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
     public class EmpresaDeleteServiceTest
     {
         private readonly Mock<IEmpresaRepository> _empresaRepository;
+        private readonly Mock<IValidadorDeEmpresaExistente> _validadorDeEmpresaExistente;
+        private readonly Mock<IValidadorDeEmpresaComFuncionarios> _validadorDeEmpresaComFuncionarios;
         private readonly NotificationContext _notificationContext;
 
-        private readonly IEmpresaDeleteService _empresaDeleteService;
+        private readonly ExclusaoDeEmpresa _exclusaoDeEmpresa;
 
         public EmpresaDeleteServiceTest()
         {
@@ -26,8 +28,10 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
             _empresaRepository = new Mock<IEmpresaRepository>();
             _notificationContext = new NotificationContext();
 
-            _empresaDeleteService = new EmpresaDeleteService(_empresaRepository.Object,
-                _notificationContext);
+            _exclusaoDeEmpresa = new ExclusaoDeEmpresa(_empresaRepository.Object,
+                _notificationContext,
+                _validadorDeEmpresaExistente.Object,
+                _validadorDeEmpresaComFuncionarios.Object);
         }
 
         [Fact(DisplayName = "Deletar empresa inexistente")]
@@ -42,7 +46,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
              .Setup(c => c.GetWithFuncionarios(It.IsAny<Predicate<Empresa>>()))
              .ReturnsAsync(new List<Empresa>() { });
 
-            await _empresaDeleteService.Delete(1);
+            await _exclusaoDeEmpresa.Excluir(1);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -66,7 +70,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
                  .Setup(c => c.GetWithFuncionarios(It.IsAny<Predicate<Empresa>>()))
                  .ReturnsAsync(new List<Empresa>() { empresa });
 
-            await _empresaDeleteService.Delete(1);
+            await _exclusaoDeEmpresa.Excluir(1);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -89,7 +93,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
                  .Setup(c => c.GetWithFuncionarios(It.IsAny<Predicate<Empresa>>()))
                  .ReturnsAsync(new List<Empresa>() { empresa });
 
-            await _empresaDeleteService.Delete(1);
+            await _exclusaoDeEmpresa.Excluir(1);
 
             Assert.False(_notificationContext.HasNotifications);
             

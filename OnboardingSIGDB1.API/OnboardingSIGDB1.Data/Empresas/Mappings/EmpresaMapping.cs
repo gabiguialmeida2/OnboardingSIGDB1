@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Empresas;
 
-namespace OnboardingSIGDB1.Data.Mappings
+namespace OnboardingSIGDB1.Data.Empresas.Mappings
 {
     public static class EmpresaMapping
     {

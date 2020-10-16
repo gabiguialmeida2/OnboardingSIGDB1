@@ -1,7 +1,7 @@
-﻿using OnboardingSIGDB1.Domain.Entitys.Validators;
+﻿using OnboardingSIGDB1.Domain.Empresas;
+using OnboardingSIGDB1.Domain.Entitys.Validators;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace OnboardingSIGDB1.Domain.Entitys
 {

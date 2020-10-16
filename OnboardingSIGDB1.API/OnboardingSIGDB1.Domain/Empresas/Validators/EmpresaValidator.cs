@@ -2,7 +2,7 @@
 using OnboardingSIGDB1.Domain.Utils;
 using System;
 
-namespace OnboardingSIGDB1.Domain.Entitys.Validators
+namespace OnboardingSIGDB1.Domain.Empresas.Validators
 {
     public class EmpresaValidator : AbstractValidator<Empresa>
     {

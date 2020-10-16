@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using OnboardingSIGDB1.Domain.Dto;
+using OnboardingSIGDB1.Domain.Empresas;
+using OnboardingSIGDB1.Domain.Empresas.Dtos;
 using OnboardingSIGDB1.Domain.Entitys;
 
 namespace OnboardingSIGDB1.Domain.AutoMapper
