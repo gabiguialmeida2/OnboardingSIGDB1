@@ -1,6 +1,4 @@
-﻿using OnboardingSIGDB1.Domain.Dto.Filtros;
-using OnboardingSIGDB1.Domain.Entitys;
-using System.Collections.Generic;
+﻿using OnboardingSIGDB1.Domain.Funcionarios;
 using System.Threading.Tasks;
 
 namespace OnboardingSIGDB1.Domain.Interfaces.Services

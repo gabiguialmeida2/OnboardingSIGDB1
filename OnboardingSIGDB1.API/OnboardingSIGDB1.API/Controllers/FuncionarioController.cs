@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using OnboardingSIGDB1.Domain.Dto;
-using OnboardingSIGDB1.Domain.Dto.Filtros;
-using OnboardingSIGDB1.Domain.Entitys;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
+using OnboardingSIGDB1.Domain._Base;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Dtos;
+using OnboardingSIGDB1.Domain.Funcionarios.Services;
+using OnboardingSIGDB1.Domain.Funcionarios.Specifications;
 
 namespace OnboardingSIGDB1.API.Controllers
 {
@@ -15,28 +15,26 @@ namespace OnboardingSIGDB1.API.Controllers
     [ApiController]
     public class FuncionarioController : ControllerBase
     {
-        private readonly IFuncionarioService _funcionarioService;
-        private readonly IFuncionarioDeleteService _funcionarioDeleteService;
-        private readonly IFuncionarioConsultaService _funcionarioConsultaService;
-        private readonly IVinculacaoFuncionarioEmpresaService _vinculacaoFuncionarioEmpresaService;
-        private readonly IVinculacaoFuncionarioCargosService _vinculacaoFuncionarioCargosService;
+        private readonly ArmazenadorDeFuncionario _armazenadorDeFuncionario;
+        private readonly ExclusaoDeFuncionario _exclusaoDeFuncionario;
+        private readonly VinculadorDeFuncionarioEmpresa _vinculadorDeFuncionarioEmpresa;
+        private readonly VinculadorDeFuncionarioCargo _vinculadorDeFuncionarioCargo;
+        private readonly IConsultaBase<Funcionario, FuncionarioDto> _consultaBase;
 
-        private readonly IMapper _mapper;
-
-        public FuncionarioController(IFuncionarioService funcionarioService, 
-            IFuncionarioDeleteService funcionarioDeleteService, 
-            IFuncionarioConsultaService funcionarioConsultaService, 
-            IVinculacaoFuncionarioEmpresaService vinculacaoFuncionarioEmpresaService, 
-            IVinculacaoFuncionarioCargosService vinculacaoFuncionarioCargosService, 
-            IMapper mapper)
+        public FuncionarioController(ArmazenadorDeFuncionario armazenadorDeFuncionario, 
+            ExclusaoDeFuncionario exclusaoDeFuncionario, 
+            VinculadorDeFuncionarioEmpresa vinculadorDeFuncionarioEmpresa, 
+            VinculadorDeFuncionarioCargo vinculadorDeFuncionarioCargo, 
+            IConsultaBase<Funcionario, FuncionarioDto> consultaBase)
         {
-            _funcionarioService = funcionarioService;
-            _funcionarioDeleteService = funcionarioDeleteService;
-            _funcionarioConsultaService = funcionarioConsultaService;
-            _vinculacaoFuncionarioEmpresaService = vinculacaoFuncionarioEmpresaService;
-            _vinculacaoFuncionarioCargosService = vinculacaoFuncionarioCargosService;
-            _mapper = mapper;
+            _armazenadorDeFuncionario = armazenadorDeFuncionario;
+            _exclusaoDeFuncionario = exclusaoDeFuncionario;
+            _vinculadorDeFuncionarioEmpresa = vinculadorDeFuncionarioEmpresa;
+            _vinculadorDeFuncionarioCargo = vinculadorDeFuncionarioCargo;
+            _consultaBase = consultaBase;
         }
+
+
 
         /// <summary>
         /// GET api/funcionarios
@@ -45,8 +43,9 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var funcionarios = await _funcionarioConsultaService.GetAll();
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)),
+            var funcionarios = _consultaBase.Consultar(ListarFuncionarioSpecificationBuilder.Novo()
+                .Build());
+            return Content(JsonConvert.SerializeObject(funcionarios),
                 "application/json");
         }
 
@@ -57,16 +56,27 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var funcionario = await _funcionarioConsultaService.GetById(id);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<FuncionarioDto>(funcionario)),
+            var funcionario = _consultaBase.Consultar(ListarFuncionarioSpecificationBuilder.Novo()
+                .ComId(id)
+                .Build())
+                .Lista
+                .FirstOrDefault();
+
+            return Content(JsonConvert.SerializeObject(funcionario),
                 "application/json");
         }
 
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] FuncionarioFiltroDto filtro)
         {
-            var funcionarios = await _funcionarioConsultaService.GetFiltro(filtro);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<FuncionarioDto>>(funcionarios)),
+            var funcionarios = _consultaBase.Consultar(ListarFuncionarioSpecificationBuilder.Novo()
+                .ComCpf(filtro.Cpf)
+                .ComDataContratacaoInicio(filtro.DataContratacaoInicio)
+                .ComDataContratacaoFim(filtro.DataContratacaoFim)
+                .ComNome(filtro.Nome)
+                .Build());
+
+            return Content(JsonConvert.SerializeObject(funcionarios),
                 "application/json");
         }
 
@@ -77,10 +87,9 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="funcionario"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] FuncionarioInsertDto funcionario)
+        public async Task<IActionResult> Post([FromBody] FuncionarioDto funcionario)
         {
-            var entity = _mapper.Map<Funcionario>(funcionario);
-            await _funcionarioService.InsertFuncionario(entity);
+            await _armazenadorDeFuncionario.Armazenar(funcionario);
             return Ok();
         }
 
@@ -90,10 +99,10 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="id"></param>
         /// <param name="funcionario"></param>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] FuncionarioUpdateDto funcionario)
+        public async Task<IActionResult> Put(long id, [FromBody] FuncionarioDto funcionario)
         {
-            var entity = _mapper.Map<Funcionario>(funcionario);
-            await _funcionarioService.UpdateFuncionario(id, entity);
+            funcionario.Id = id;
+            await _armazenadorDeFuncionario.Armazenar(funcionario);
             return Ok();
         }
 
@@ -104,7 +113,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _funcionarioDeleteService.Delete(id);
+            await _exclusaoDeFuncionario.Excluir(id);
             return Ok();
         }
 
@@ -117,7 +126,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpPost("vincular/{funcionarioId}/empresa/{empresaId}")]
         public async Task<IActionResult> VincularEmpresa(long funcionarioId, long empresaId)
         {
-            await _vinculacaoFuncionarioEmpresaService.Vincular(funcionarioId, empresaId);
+            await _vinculadorDeFuncionarioEmpresa.Vincular(funcionarioId, empresaId);
             return Ok();
         }
 
@@ -131,7 +140,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpPost("vincular/{funcionarioId}/cargo/{cargoId}/data/{dataVinculacao}")]
         public async Task<IActionResult> VincularCargo(long funcionarioId, long cargoId, DateTime dataVinculacao)
         {
-            await _vinculacaoFuncionarioCargosService.Vincular(funcionarioId, cargoId, dataVinculacao);
+            await _vinculadorDeFuncionarioCargo.Vincular(funcionarioId, cargoId, dataVinculacao);
             return Ok();
         }
     }

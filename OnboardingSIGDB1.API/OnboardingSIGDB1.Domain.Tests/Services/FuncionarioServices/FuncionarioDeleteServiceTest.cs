@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Services;
+using OnboardingSIGDB1.Domain.Funcionarios.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.FuncionarioServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -17,17 +17,18 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
     {
         private readonly Mock<IFuncionarioRepository> _funcionarioRepository;
         private readonly NotificationContext _notificationContext;
-
-        private readonly IFuncionarioDeleteService _funcionarioDeleteService;
+        private readonly ExclusaoDeFuncionario _exclusaoDeFuncionario;
 
         public FuncionarioDeleteServiceTest()
         {
 
             _funcionarioRepository = new Mock<IFuncionarioRepository>();
             _notificationContext = new NotificationContext();
+            var validadorDeFuncionarioExistente = new ValidadorDeFuncionarioExistente(_notificationContext);
 
-            _funcionarioDeleteService = new FuncionarioDeleteService(_funcionarioRepository.Object,
-                _notificationContext);
+            _exclusaoDeFuncionario = new ExclusaoDeFuncionario(_funcionarioRepository.Object,
+                    _notificationContext,
+                    validadorDeFuncionarioExistente);
         }
 
         [Fact(DisplayName = "Deletar funcionario inexistente")]
@@ -42,7 +43,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
              .Setup(c => c.Get(It.IsAny<Predicate<Funcionario>>()))
              .ReturnsAsync(new List<Funcionario>() { });
 
-            await _funcionarioDeleteService.Delete(1);
+            await _exclusaoDeFuncionario.Excluir(1);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -53,7 +54,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
             _funcionarioRepository.Verify(r => r.Delete(1), Times.Never);
         }
 
-        
+
         [Fact(DisplayName = "Deletar funcionario com sucesso")]
         public async Task Deletar_Funcionario_Sucesso()
         {
@@ -66,7 +67,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
                  .Setup(c => c.Get(It.IsAny<Predicate<Funcionario>>()))
                  .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _funcionarioDeleteService.Delete(1);
+            await _exclusaoDeFuncionario.Excluir(1);
 
             Assert.False(_notificationContext.HasNotifications);
 

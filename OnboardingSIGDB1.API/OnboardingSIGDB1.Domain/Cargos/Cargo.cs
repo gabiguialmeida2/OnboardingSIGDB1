@@ -1,5 +1,5 @@
-﻿using OnboardingSIGDB1.Domain.Entitys;
-using OnboardingSIGDB1.Domain.Entitys.Validators;
+﻿using OnboardingSIGDB1.Domain.Cargos.Validators;
+using OnboardingSIGDB1.Domain.Funcionarios;
 using System.Collections.Generic;
 
 namespace OnboardingSIGDB1.Domain.Cargos

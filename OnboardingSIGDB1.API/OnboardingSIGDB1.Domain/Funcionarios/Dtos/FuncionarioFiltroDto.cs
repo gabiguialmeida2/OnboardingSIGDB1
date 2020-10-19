@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OnboardingSIGDB1.Domain.Dto.Filtros
+namespace OnboardingSIGDB1.Domain.Funcionarios.Dtos
 {
     public class FuncionarioFiltroDto
     {

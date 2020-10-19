@@ -1,4 +1,4 @@
-﻿using OnboardingSIGDB1.Domain.Entitys;
+﻿using OnboardingSIGDB1.Domain.Funcionarios;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -1,7 +1,7 @@
 ﻿using OnboardingSIGDB1.Domain.Cargos.Dtos;
 using System;
 
-namespace OnboardingSIGDB1.Domain.Dto
+namespace OnboardingSIGDB1.Domain.Funcionarios.Dtos
 {
     public class FuncionarioCargoDto
     {

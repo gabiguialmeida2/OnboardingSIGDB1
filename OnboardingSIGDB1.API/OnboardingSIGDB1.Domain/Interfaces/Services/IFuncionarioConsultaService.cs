@@ -1,5 +1,5 @@
-﻿using OnboardingSIGDB1.Domain.Dto.Filtros;
-using OnboardingSIGDB1.Domain.Entitys;
+﻿using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Dtos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

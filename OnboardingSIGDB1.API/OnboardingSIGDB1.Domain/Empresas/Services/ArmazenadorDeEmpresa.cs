@@ -1,6 +1,5 @@
 ﻿using OnboardingSIGDB1.Domain.Empresas.Dtos;
 using OnboardingSIGDB1.Domain.Empresas.Validators;
-using OnboardingSIGDB1.Domain.Entitys.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Notifications;
 using OnboardingSIGDB1.Domain.Utils;

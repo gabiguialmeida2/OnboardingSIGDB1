@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
 using OnboardingSIGDB1.Domain.Interfaces;
 using System;
 using System.Collections.Generic;

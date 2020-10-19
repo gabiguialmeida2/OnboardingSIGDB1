@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OnboardingSIGDB1.Domain.Dto
+namespace OnboardingSIGDB1.Domain.Funcionarios.Dtos
 {
-    public class FuncionarioDto
+    public class FuncionarioCompletoDto
     {
         public long Id { get; set; }
         public string Nome { get; set; }

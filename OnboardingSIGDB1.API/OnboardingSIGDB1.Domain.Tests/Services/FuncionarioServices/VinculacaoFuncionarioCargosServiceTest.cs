@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Services;
+using OnboardingSIGDB1.Domain.Funcionarios.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.FuncionarioServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -18,17 +18,21 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
     {
         private readonly Mock<IFuncionarioRepository> _funcionarioRepository;
         private readonly NotificationContext _notificationContext;
-
-        private readonly IVinculacaoFuncionarioCargosService _vinculacaoFuncionarioCargosService;
+        private readonly VinculadorDeFuncionarioCargo _vinculadorDeFuncionarioCargo;
 
         public VinculacaoFuncionarioCargosServiceTest()
         {
 
             _funcionarioRepository = new Mock<IFuncionarioRepository>();
             _notificationContext = new NotificationContext();
+            var validadorDeFuncionarioComCargoExistente = new ValidadorDeFuncionarioComCargoExistente(_notificationContext);
+            var validadorFuncionarioVinculadoAEmpresa = new ValidadorFuncionarioVinculadoAEmpresa(_notificationContext);
 
-            _vinculacaoFuncionarioCargosService = new VinculacaoFuncionarioCargosService(_funcionarioRepository.Object,
-                _notificationContext);
+           _vinculadorDeFuncionarioCargo = new VinculadorDeFuncionarioCargo(_funcionarioRepository.Object,
+                _notificationContext,
+                validadorDeFuncionarioComCargoExistente,
+                validadorFuncionarioVinculadoAEmpresa
+                );
         }
 
         [Fact(DisplayName = "Vincular funcionario sem empresa")]
@@ -40,7 +44,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
             .Setup(c => c.GetWithIncludes(It.IsAny<Predicate<Funcionario>>()))
             .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _vinculacaoFuncionarioCargosService.Vincular(funcionario.Id, 1, DateTime.Now.Date);
+            await _vinculadorDeFuncionarioCargo.Vincular(funcionario.Id, 1, DateTime.Now.Date);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -65,7 +69,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
            .Setup(c => c.GetWithIncludes(It.IsAny<Predicate<Funcionario>>()))
            .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _vinculacaoFuncionarioCargosService.Vincular(funcionario.Id,
+            await _vinculadorDeFuncionarioCargo.Vincular(funcionario.Id,
                 funcionario.FuncionarioCargos.First().CargoId,
                 DateTime.Now.Date);
 
@@ -91,7 +95,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
            .Setup(c => c.GetWithIncludes(It.IsAny<Predicate<Funcionario>>()))
            .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _vinculacaoFuncionarioCargosService.Vincular(funcionario.Id,
+            await _vinculadorDeFuncionarioCargo.Vincular(funcionario.Id,
                 1,
                 DateTime.Now.Date);
 

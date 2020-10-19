@@ -1,6 +1,5 @@
 ﻿using OnboardingSIGDB1.Domain.Cargos.Dtos;
 using OnboardingSIGDB1.Domain.Cargos.Validators;
-using OnboardingSIGDB1.Domain.Entitys.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Notifications;
 using System.Linq;

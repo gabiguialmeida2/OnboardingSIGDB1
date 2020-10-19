@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using Bogus.Extensions.Brazil;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Dtos;
 using System.Collections.Generic;
 
 namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
@@ -23,12 +24,7 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
         {
             Funcionario = new Faker<Funcionario>("pt_BR")
                    .CustomInstantiator(f =>
-                       new Funcionario()
-                       {
-                           Cpf = f.Person.Cpf(includeFormatSymbols: false),
-                           DataContratacao = f.Date.Past(),
-                           Nome = f.Person.FullName
-                       });
+                       new Funcionario(f.Person.FullName, f.Person.Cpf(includeFormatSymbols: false), f.Date.Past()));
         }
 
         public FuncionarioBuilder WithId(long id)
@@ -39,13 +35,13 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 
         public FuncionarioBuilder WithCpf(string cpf)
         {
-            Funcionario.Cpf = cpf;
+            Funcionario.AlterarCpf(cpf);
             return this;
         }
 
         public FuncionarioBuilder WithNome(string nome)
         {
-            Funcionario.Nome = nome;
+            Funcionario.AlterarNome(nome);
             return this;
         }
 
@@ -62,14 +58,14 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
                         Funcionario.Id,
                         cargo.Id,
                         new Faker().Date.Past())
-                        {
-                            Cargo = cargo,
-                            Funcionario = Funcionario
-                        }
+                    {
+                        Cargo = cargo,
+                        Funcionario = Funcionario
+                    }
                     );
             }
 
-            Funcionario.FuncionarioCargos = funcionarioCargos;
+            Funcionario.AlterarFuncionarioCargos(funcionarioCargos);
             return this;
         }
 
@@ -79,17 +75,31 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
                 .WithId(1)
                 .Build();
 
-            Funcionario.EmpresaId = Funcionario.Empresa.Id;
+            Funcionario.AlterarEmpresaId(Funcionario.Empresa.Id);
 
             return this;
         }
 
         public Funcionario Build()
         {
-            return new Funcionario(Funcionario.Id,
+            var funcionario = new Funcionario(Funcionario.Id,
                 Funcionario.Nome,
                 Funcionario.Cpf,
                 Funcionario.DataContratacao);
+            funcionario.AlterarFuncionarioCargos(Funcionario.FuncionarioCargos);
+            funcionario.AlterarEmpresaId(Funcionario.EmpresaId);
+            return funcionario;
+        }
+
+        public FuncionarioDto BuildDto()
+        {
+            return new FuncionarioDto
+            {
+                Id = Funcionario.Id,
+                Nome = Funcionario.Nome,
+                Cpf = Funcionario.Cpf,
+                DataContratacao = Funcionario.DataContratacao
+            };
         }
 
         public List<Funcionario> BuildList()

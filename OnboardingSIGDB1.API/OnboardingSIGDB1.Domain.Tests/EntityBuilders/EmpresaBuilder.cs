@@ -3,7 +3,7 @@ using Bogus.DataSets;
 using Bogus.Extensions.Brazil;
 using OnboardingSIGDB1.Domain.Empresas;
 using OnboardingSIGDB1.Domain.Empresas.Dtos;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
 using System;
 using System.Collections.Generic;
 

@@ -1,7 +1,7 @@
 ﻿using Bogus;
 using OnboardingSIGDB1.Domain.Cargos;
 using OnboardingSIGDB1.Domain.Cargos.Dtos;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
 using System.Collections.Generic;
 
 namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders

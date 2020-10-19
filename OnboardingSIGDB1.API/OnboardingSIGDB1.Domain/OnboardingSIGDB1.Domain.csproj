@@ -5,6 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Atrributes\**" />
+    <Compile Remove="Base\**" />
+    <EmbeddedResource Remove="Atrributes\**" />
+    <EmbeddedResource Remove="Base\**" />
+    <None Remove="Atrributes\**" />
+    <None Remove="Base\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Cargos\Dtos\CargoInsertUpdateDto.cs" />
     <Compile Remove="Cargos\Services\CargoConsultaService.cs" />
     <Compile Remove="Cargos\Services\CargoDeleteService.cs" />
@@ -15,11 +24,6 @@
     <Compile Remove="Cargos\Validators\CargoValidationService.cs" />
     <Compile Remove="Empresas\Dtos\EmpresaInsertDto.cs" />
     <Compile Remove="Empresas\Dtos\EmpresaUpdateDto.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Atrributes\" />
-    <Folder Include="Base\" />
   </ItemGroup>
 
   <ItemGroup>

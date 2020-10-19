@@ -2,14 +2,14 @@
 using OnboardingSIGDB1.Data;
 using OnboardingSIGDB1.Data.Repositorios;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
-using OnboardingSIGDB1.Domain.Services.FuncionarioServices;
 using OnboardingSIGDB1.Domain._Base;
 using OnboardingSIGDB1.Data.Empresas.Repositorios;
 using OnboardingSIGDB1.Domain.Empresas.Services;
 using OnboardingSIGDB1.Domain.Empresas.Validators;
 using OnboardingSIGDB1.Domain.Cargos.Services;
 using OnboardingSIGDB1.Domain.Cargos.Validators;
+using OnboardingSIGDB1.Domain.Funcionarios.Services;
+using OnboardingSIGDB1.Domain.Funcionarios.Validators;
 
 namespace OnboardingSIGDB1.IOC
 {
@@ -35,14 +35,17 @@ namespace OnboardingSIGDB1.IOC
             services.AddScoped(typeof(IValidadorDeEmpresaDuplicada), typeof(ValidadorDeEmpresaDuplicada));
             services.AddScoped(typeof(IValidadorDeEmpresaExistente), typeof(ValidadorDeEmpresaExistente));
             services.AddScoped(typeof(IValidadorDeEmpresaComFuncionarios), typeof(ValidadorDeEmpresaComFuncionarios));
-            
 
-
-            services.AddScoped(typeof(IFuncionarioService), typeof(FuncionarioService));
-            services.AddScoped(typeof(IFuncionarioConsultaService), typeof(FuncionarioConsultaService));
-            services.AddScoped(typeof(IFuncionarioDeleteService), typeof(FuncionarioDeleteService));
-            services.AddScoped(typeof(IVinculacaoFuncionarioEmpresaService), typeof(VinculacaoFuncionarioEmpresaService));
-            services.AddScoped(typeof(IVinculacaoFuncionarioCargosService), typeof(VinculacaoFuncionarioCargosService));
+            services.AddScoped(typeof(ArmazenadorDeFuncionario));
+            services.AddScoped(typeof(ExclusaoDeFuncionario));
+            services.AddScoped(typeof(VinculadorDeFuncionarioCargo));
+            services.AddScoped(typeof(VinculadorDeFuncionarioEmpresa));
+            services.AddScoped(typeof(IValidadorDeCpf), typeof(ValidadorDeCpf));
+            services.AddScoped(typeof(IValidadorDeFuncionarioComCargoExistente), typeof(ValidadorDeFuncionarioComCargoExistente));
+            services.AddScoped(typeof(IValidadorDeFuncionarioDuplicado), typeof(ValidadorDeFuncionarioDuplicado));
+            services.AddScoped(typeof(IValidadorDeFuncionarioExistente), typeof(ValidadorDeFuncionarioExistente));
+            services.AddScoped(typeof(IValidadorFuncionarioPossuiAlgumaEmpresaVinculada), typeof(ValidadorFuncionarioPossuiAlgumaEmpresaVinculada));
+            services.AddScoped(typeof(IValidadorFuncionarioVinculadoAEmpresa), typeof(ValidadorFuncionarioVinculadoAEmpresa));
 
             services.AddScoped(typeof(ArmazenadorDeCargo));
             services.AddScoped(typeof(ExclusaoDeCargo));

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using OnboardingSIGDB1.Domain.Cargos;
 using OnboardingSIGDB1.Domain.Cargos.Dtos;
-using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Empresas;
 using OnboardingSIGDB1.Domain.Empresas.Dtos;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Dtos;
 
 namespace OnboardingSIGDB1.Domain.AutoMapper
 {
@@ -14,6 +14,7 @@ namespace OnboardingSIGDB1.Domain.AutoMapper
         {
             CreateMap<Empresa, EmpresaDto>();
             CreateMap<Funcionario, FuncionarioDto>();
+            CreateMap<Funcionario, FuncionarioCompletoDto>();
             CreateMap<Cargo, CargoDto>();
             CreateMap<FuncionarioCargo, FuncionarioCargoDto>();
         }

@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using OnboardingSIGDB1.Domain.Funcionarios;
 using OnboardingSIGDB1.Domain.Utils;
 using System;
 
-namespace OnboardingSIGDB1.Domain.Entitys.Validators
+namespace OnboardingSIGDB1.Domain.Funcionarios.Validators
 {
     public class FuncionarioValidator : AbstractValidator<Funcionario>
     {

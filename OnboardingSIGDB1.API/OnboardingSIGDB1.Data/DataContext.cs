@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OnboardingSIGDB1.Domain.Entitys;
+
 using OnboardingSIGDB1.Data.Mappings;
 using OnboardingSIGDB1.Domain.Empresas;
 using OnboardingSIGDB1.Data.Empresas.Mappings;
 using OnboardingSIGDB1.Domain.Cargos;
 using OnboardingSIGDB1.Data.Cursos.Mapping;
+using OnboardingSIGDB1.Domain.Funcionarios;
 
 namespace OnboardingSIGDB1.Data
 {

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using OnboardingSIGDB1.Domain.Cargos;
 using OnboardingSIGDB1.Domain.Cargos.Dtos;
-using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Empresas;
 using OnboardingSIGDB1.Domain.Empresas.Dtos;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Dtos;
 using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.Domain.AutoMapper
@@ -18,9 +18,8 @@ namespace OnboardingSIGDB1.Domain.AutoMapper
 
             CreateMap<FuncionarioDto, Funcionario>()
               .ConvertUsing(c => new Funcionario(c.Nome, c.Cpf.RemoveMaskCpf(), c.DataContratacao));
-            CreateMap<FuncionarioUpdateDto, Funcionario>();
-            CreateMap<FuncionarioInsertDto, Funcionario>()
-                .ConvertUsing(c => new Funcionario(c.Nome, c.Cpf.RemoveMaskCpf(), c.DataContratacao));
+           
+            CreateMap<FuncionarioCompletoDto, Funcionario>();
 
             CreateMap<CargoDto, Cargo>();
 

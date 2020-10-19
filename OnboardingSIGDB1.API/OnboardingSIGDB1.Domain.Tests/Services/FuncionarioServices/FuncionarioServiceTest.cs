@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Funcionarios;
+using OnboardingSIGDB1.Domain.Funcionarios.Dtos;
+using OnboardingSIGDB1.Domain.Funcionarios.Services;
+using OnboardingSIGDB1.Domain.Funcionarios.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.FuncionarioServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,23 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
     {
         private readonly Mock<IFuncionarioRepository> _funcionarioRepository;
         private readonly NotificationContext _notificationContext;
-
-        private readonly IFuncionarioService _funcionarioService;
+        private readonly ArmazenadorDeFuncionario _armazenadorDeFuncionario;
 
         public FuncionarioServiceTest()
         {
-
             _funcionarioRepository = new Mock<IFuncionarioRepository>();
             _notificationContext = new NotificationContext();
-
-            _funcionarioService = new FuncionarioService(_funcionarioRepository.Object,
+            var validadorDeCpf = new ValidadorDeCpf(_notificationContext);
+            var validadorDeFuncionarioExistente = new ValidadorDeFuncionarioExistente(_notificationContext);
+            var validadorDeFuncionarioDuplicado = new ValidadorDeFuncionarioDuplicado(_funcionarioRepository.Object,
                 _notificationContext);
+
+            _armazenadorDeFuncionario = new ArmazenadorDeFuncionario(_funcionarioRepository.Object,
+                _notificationContext,
+                validadorDeCpf,
+                validadorDeFuncionarioExistente,
+                validadorDeFuncionarioDuplicado);
+
         }
 
         [Theory(DisplayName = "Inserir funcionario nome invalido")]
@@ -37,8 +44,9 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
         {
             var builder = new FuncionarioBuilder().WithNome(nome);
             var funcionario = builder.Build();
+            var dto = builder.BuildDto();
 
-            await VerifyInsertFuncionario(funcionario);
+            await VerifyInsertFuncionario(funcionario, dto);
         }
 
         [Theory(DisplayName = "Inserir funcionario cpf tamanho invalido")]
@@ -48,15 +56,15 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
         {
             var builder = new FuncionarioBuilder().WithCpf(cpf);
             var funcionario = builder.Build();
+            var dto = builder.BuildDto();
 
-            await VerifyInsertFuncionario(funcionario);
+            await VerifyInsertFuncionario(funcionario, dto);
         }
 
-        private async Task VerifyInsertFuncionario(Funcionario funcionario)
+        private async Task VerifyInsertFuncionario(Funcionario funcionario, FuncionarioDto funcionarioDto)
         {
-            await _funcionarioService.InsertFuncionario(funcionario);
-
-            _funcionarioRepository.Verify(r => r.Add(funcionario), Times.Never);
+            await _armazenadorDeFuncionario.Armazenar(funcionarioDto);
+            VerifyFuncionarioAdd(funcionarioDto, Times.Never());
             Assert.False(funcionario.Valid);
             Assert.True(funcionario.ValidationResult.Errors.Count > 0);
         }
@@ -66,10 +74,11 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
         {
             var builder = new FuncionarioBuilder().WithCpf("12345678910");
             var funcionario = builder.Build();
+            var dto = builder.BuildDto();
 
-            await _funcionarioService.InsertFuncionario(funcionario);
-
-            _funcionarioRepository.Verify(r => r.Add(funcionario), Times.Never);
+            await _armazenadorDeFuncionario.Armazenar(dto);
+            
+            VerifyFuncionarioAdd(dto, Times.Never());
 
             Assert.True(_notificationContext.HasNotifications);
 
@@ -84,14 +93,15 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
         {
             var builder = new FuncionarioBuilder();
             var funcionario = builder.Build();
+            var dto = builder.BuildDto();
+
 
             _funcionarioRepository
                .Setup(c => c.Get(It.IsAny<Predicate<Funcionario>>()))
                .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _funcionarioService.InsertFuncionario(funcionario);
-
-            _funcionarioRepository.Verify(r => r.Add(funcionario), Times.Never);
+            await _armazenadorDeFuncionario.Armazenar(dto);
+            VerifyFuncionarioAdd(dto, Times.Never());
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -104,11 +114,10 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
         public async Task Inserir_Funcionario_Sucesso()
         {
             var builder = new FuncionarioBuilder();
-            var funcionario = builder.Build();
+            var dto = builder.BuildDto();
+            await _armazenadorDeFuncionario.Armazenar(dto);
 
-            await _funcionarioService.InsertFuncionario(funcionario);
-
-            _funcionarioRepository.Verify(r => r.Add(funcionario), Times.Once);
+            VerifyFuncionarioAdd(dto, Times.Once());
 
             Assert.False(_notificationContext.HasNotifications);
         }
@@ -123,12 +132,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
                 .WithId(1);
 
             var funcionario = builder.Build();
+            var dto = builder.BuildDto();
 
             _funcionarioRepository
              .Setup(c => c.Get(It.IsAny<Predicate<Funcionario>>()))
              .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _funcionarioService.UpdateFuncionario(1, funcionario);
+            await _armazenadorDeFuncionario.Armazenar(dto);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -143,12 +153,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
                 .WithId(1);
 
             var funcionario = builder.Build();
-
+            var dto = builder.BuildDto();
+            
             _funcionarioRepository
              .Setup(c => c.Get(It.IsAny<Predicate<Funcionario>>()))
              .ReturnsAsync(new List<Funcionario>() { });
 
-            await _funcionarioService.UpdateFuncionario(1, funcionario);
+            await _armazenadorDeFuncionario.Armazenar(dto);
 
             Assert.True(_notificationContext.HasNotifications);
             _notificationContext.Notifications.Should().HaveCount(1);
@@ -166,16 +177,24 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.FuncionarioServices
                 .WithId(1);
 
             var funcionario = builder.Build();
-
+            var dto = builder.BuildDto();
             _funcionarioRepository
              .Setup(c => c.Get(It.IsAny<Predicate<Funcionario>>()))
              .ReturnsAsync(new List<Funcionario>() { funcionario });
 
-            await _funcionarioService.UpdateFuncionario(1, funcionario);
-
+            await _armazenadorDeFuncionario.Armazenar(dto);
+            
             Assert.False(_notificationContext.HasNotifications);
 
             _funcionarioRepository.Verify(r => r.Update(funcionario), Times.Once);
+        }
+
+        private void VerifyFuncionarioAdd(FuncionarioDto funcionarioDto, Times times)
+        {
+            _funcionarioRepository.Verify(r => r.Add(It.Is<Funcionario>(func =>
+                func.DataContratacao == funcionarioDto.DataContratacao
+                && func.Cpf == funcionarioDto.Cpf
+                && func.Nome == funcionarioDto.Nome)), times);
         }
     }
 }
