@@ -11,35 +11,31 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 {
     public class EmpresaBuilder
     {
-        private long _id;
-        private string _cnpj;
-        private string _nome;
-        private DateTime _data;
+        private Empresa Empresa { get; set; }
         private IEnumerable<Funcionario> _funcionarios;
 
         public EmpresaBuilder()
         {
-            var company = new Faker<Company>().Generate();
-            _cnpj = company.Cnpj(includeFormatSymbols: false);
-            _nome = company.CompanyName();
-            _data = new Faker("pt_BR").Date.Past();
+            Empresa = new Faker<Empresa>("pt_BR")
+                 .CustomInstantiator(f =>
+                     new Empresa(f.Company.CompanyName(), f.Company.Cnpj(includeFormatSymbols: false), f.Date.Past()));
         }
 
         public EmpresaBuilder WithId(long id)
         {
-            _id = id;
+            Empresa.AlterarId(id);
             return this;
         }
 
         public EmpresaBuilder WithCnpj(string cnpj)
         {
-            _cnpj = cnpj;
+            Empresa.AlterarCnpj(cnpj);
             return this;
         }
 
         public EmpresaBuilder WithNome(string nome)
         {
-            _nome = nome;
+            Empresa.AlterarNome(nome);
             return this;
         }
 
@@ -53,7 +49,7 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 
         public Empresa Build()
         {
-            var empresa = new Empresa(_id, _nome, _cnpj, _data);
+            var empresa = new Empresa(Empresa.Id, Empresa.Nome, Empresa.Cnpj, Empresa.DataFundacao);
             empresa.AlterarFuncionarios(_funcionarios);
 
             return empresa;

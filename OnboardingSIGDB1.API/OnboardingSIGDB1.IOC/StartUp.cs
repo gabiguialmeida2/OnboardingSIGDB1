@@ -3,13 +3,13 @@ using OnboardingSIGDB1.Data;
 using OnboardingSIGDB1.Data.Repositorios;
 using OnboardingSIGDB1.Domain.Interfaces;
 using OnboardingSIGDB1.Domain.Interfaces.Services;
-using OnboardingSIGDB1.Domain.Services.CargoServices;
 using OnboardingSIGDB1.Domain.Services.FuncionarioServices;
 using OnboardingSIGDB1.Domain._Base;
-using OnboardingSIGDB1.Data.Empresas.Consultas;
 using OnboardingSIGDB1.Data.Empresas.Repositorios;
 using OnboardingSIGDB1.Domain.Empresas.Services;
 using OnboardingSIGDB1.Domain.Empresas.Validators;
+using OnboardingSIGDB1.Domain.Cargos.Services;
+using OnboardingSIGDB1.Domain.Cargos.Validators;
 
 namespace OnboardingSIGDB1.IOC
 {
@@ -44,9 +44,10 @@ namespace OnboardingSIGDB1.IOC
             services.AddScoped(typeof(IVinculacaoFuncionarioEmpresaService), typeof(VinculacaoFuncionarioEmpresaService));
             services.AddScoped(typeof(IVinculacaoFuncionarioCargosService), typeof(VinculacaoFuncionarioCargosService));
 
-            services.AddScoped(typeof(ICargoService), typeof(CargoService));
-            services.AddScoped(typeof(ICargoConsultaService), typeof(CargoConsultaService));
-            services.AddScoped(typeof(ICargoDeleteService), typeof(CargoDeleteService));
+            services.AddScoped(typeof(ArmazenadorDeCargo));
+            services.AddScoped(typeof(ExclusaoDeCargo));
+            services.AddScoped(typeof(IValidadorDeCargoComFuncionarios), typeof(ValidadorDeCargoComFuncionarios));
+            services.AddScoped(typeof(IValidadorDeCargoExistente), typeof(ValidadorDeCargoExistente));
 
             return services;
         }

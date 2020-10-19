@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using OnboardingSIGDB1.Domain.Cargos;
 using OnboardingSIGDB1.Domain.Utils;
 
 namespace OnboardingSIGDB1.Domain.Entitys.Validators

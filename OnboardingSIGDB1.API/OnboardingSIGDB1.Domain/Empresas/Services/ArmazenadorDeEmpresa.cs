@@ -17,10 +17,10 @@ namespace OnboardingSIGDB1.Domain.Empresas.Services
         private readonly IValidadorDeEmpresaDuplicada _validadorDeEmpresaDuplicada;
         private readonly IValidadorDeEmpresaExistente _validadorDeEmpresaExistente;
 
-        public ArmazenadorDeEmpresa(IEmpresaRepository empresaRepository, 
-            NotificationContext notificationContext, 
-            IValidadorDeCnpj validadorDeCnpj, 
-            IValidadorDeEmpresaDuplicada validadorDeEmpresaDuplicada, 
+        public ArmazenadorDeEmpresa(IEmpresaRepository empresaRepository,
+            NotificationContext notificationContext,
+            IValidadorDeCnpj validadorDeCnpj,
+            IValidadorDeEmpresaDuplicada validadorDeEmpresaDuplicada,
             IValidadorDeEmpresaExistente validadorDeEmpresaExistente)
         {
             _empresaRepository = empresaRepository;
@@ -48,21 +48,22 @@ namespace OnboardingSIGDB1.Domain.Empresas.Services
             {
                 empresaDatabase.AlterarNome(empresaDto.Nome);
                 empresaDatabase.AlterarDataFundacao(empresaDto.DataFundacao);
+             
+                if (!empresaDatabase.Validate(empresaDatabase, new EmpresaValidator()))
+                {
+                    _notificationContext.AddNotifications(empresaDatabase.ValidationResult);
+                    return;
+                }
+
+                await _empresaRepository.Update(empresaDatabase);
             }
 
-            if (!empresaDatabase.Validate(empresaDatabase, new EmpresaValidator()))
-            {
-                _notificationContext.AddNotifications(empresaDatabase.ValidationResult);
-                return;
-            }
-
-            await _empresaRepository.Update(empresaDatabase);
         }
 
         private async Task NovaEmpresa(EmpresaDto empresaDto)
         {
-            var empresa = new Empresa(empresaDto.Nome, 
-                empresaDto.Cnpj.RemoveMaskCnpj(), 
+            var empresa = new Empresa(empresaDto.Nome,
+                empresaDto.Cnpj.RemoveMaskCnpj(),
                 empresaDto.DataFundacao);
 
             if (!empresa.Valid)

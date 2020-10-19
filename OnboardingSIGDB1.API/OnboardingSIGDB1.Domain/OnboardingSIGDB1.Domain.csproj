@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cargos\Dtos\CargoInsertUpdateDto.cs" />
+    <Compile Remove="Cargos\Services\CargoConsultaService.cs" />
+    <Compile Remove="Cargos\Services\CargoDeleteService.cs" />
+    <Compile Remove="Cargos\Services\CargoService.cs" />
+    <Compile Remove="Cargos\Services\ICargoConsultaService.cs" />
+    <Compile Remove="Cargos\Services\ICargoDeleteService.cs" />
+    <Compile Remove="Cargos\Services\ICargoService.cs" />
+    <Compile Remove="Cargos\Validators\CargoValidationService.cs" />
     <Compile Remove="Empresas\Dtos\EmpresaInsertDto.cs" />
     <Compile Remove="Empresas\Dtos\EmpresaUpdateDto.cs" />
   </ItemGroup>

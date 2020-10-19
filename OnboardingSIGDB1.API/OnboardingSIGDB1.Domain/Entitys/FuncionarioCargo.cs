@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnboardingSIGDB1.Domain.Cargos;
+using System;
 
 namespace OnboardingSIGDB1.Domain.Entitys
 {

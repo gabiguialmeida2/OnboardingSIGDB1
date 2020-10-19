@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using OnboardingSIGDB1.Domain.Cargos;
+using OnboardingSIGDB1.Domain.Cargos.Dtos;
 using OnboardingSIGDB1.Domain.Dto;
 using OnboardingSIGDB1.Domain.Empresas;
 using OnboardingSIGDB1.Domain.Empresas.Dtos;

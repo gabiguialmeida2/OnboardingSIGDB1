@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnboardingSIGDB1.Domain.Cargos.Dtos;
+using System;
 
 namespace OnboardingSIGDB1.Domain.Dto
 {

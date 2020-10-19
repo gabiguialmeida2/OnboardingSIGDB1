@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Cargos;
+using OnboardingSIGDB1.Domain.Cargos.Services;
+using OnboardingSIGDB1.Domain.Cargos.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.CargoServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -18,15 +18,17 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
         private readonly Mock<IRepository<Cargo>> _cargoRepositoryMock;
         private readonly NotificationContext _notificationContext;
 
-        private readonly ICargoService _cargoService;
+        private readonly ArmazenadorDeCargo _armazenadorDeCargo;
+        private readonly IValidadorDeCargoExistente _validadorDeCargoExistente;
 
         public CargoServiceTest()
         {
             _cargoRepositoryMock = new Mock<IRepository<Cargo>>();
             _notificationContext = new NotificationContext();
-
-            _cargoService = new CargoService(_cargoRepositoryMock.Object,
-                _notificationContext);
+            _validadorDeCargoExistente = new ValidadorDeCargoExistente(_notificationContext);
+            _armazenadorDeCargo = new ArmazenadorDeCargo(_cargoRepositoryMock.Object,
+                _notificationContext,
+                _validadorDeCargoExistente);
         }
 
         [Theory(DisplayName = "Inserir cargo inválido")]
@@ -36,8 +38,9 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
         {
             var builder = new CargoBuilder().WithDescricao(descricao);
             var entity = builder.Build();
+            var dto = builder.BuildDto();
 
-            await _cargoService.InsertCargo(entity);
+            await _armazenadorDeCargo.Armazenar(dto);
 
             _cargoRepositoryMock.Verify(r => r.Add(entity), Times.Never);
             Assert.True(_notificationContext.HasNotifications);
@@ -49,10 +52,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
         {
             var builder = new CargoBuilder();
             var entity = builder.Build();
+            var dto = builder.BuildDto();
 
-            await _cargoService.InsertCargo(entity);
+            await _armazenadorDeCargo.Armazenar(dto);
 
-            _cargoRepositoryMock.Verify(r => r.Add(entity), Times.Once);
+            _cargoRepositoryMock.Verify(r => 
+                r.Add(It.Is<Cargo>(cargo => cargo.Descricao == dto.Descricao)), 
+                Times.Once);
             Assert.False(_notificationContext.HasNotifications);
         }
 
@@ -64,13 +70,15 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
             var builder = new CargoBuilder()
                 .WithDescricao(descricao)
                 .WithId(1);
+
             var entity = new Cargo(descricao);
+            var dto = builder.BuildDto();
 
             _cargoRepositoryMock
                .Setup(c => c.Get(It.IsAny<Predicate<Cargo>>()))
                .ReturnsAsync(new List<Cargo> { entity });
 
-            await _cargoService.UpdateCargo(1, entity);
+            await _armazenadorDeCargo.Armazenar(dto);
 
             _cargoRepositoryMock.Verify(r => r.Update(entity), Times.Never);
             Assert.True(_notificationContext.HasNotifications);
@@ -82,12 +90,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
         {
             var builder = new CargoBuilder().WithId(10);
             var entity = builder.Build();
+            var dto = builder.BuildDto();
 
             _cargoRepositoryMock
                .Setup(c => c.Get(It.IsAny<Predicate<Cargo>>()))
                .ReturnsAsync(new List<Cargo> { });
 
-            await _cargoService.UpdateCargo(10, entity);
+            await _armazenadorDeCargo.Armazenar(dto);
 
             _cargoRepositoryMock.Verify(r => r.Update(entity), Times.Never);
             Assert.True(_notificationContext.HasNotifications);
@@ -99,14 +108,13 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
         {
             var builder = new CargoBuilder().WithId(1);
             var entityAlteracao = builder.Build();
+            var dto = builder.BuildDto();
 
             _cargoRepositoryMock
                .Setup(c => c.Get(It.IsAny<Predicate<Cargo>>()))
                .ReturnsAsync(new List<Cargo> { entityAlteracao });
 
-            entityAlteracao.Descricao = "Teste Alteração";
-
-            await _cargoService.UpdateCargo(1, entityAlteracao);
+            await _armazenadorDeCargo.Armazenar(dto);
 
             _cargoRepositoryMock.Verify(r => r.Update(entityAlteracao), Times.Once);
             Assert.False(_notificationContext.HasNotifications);

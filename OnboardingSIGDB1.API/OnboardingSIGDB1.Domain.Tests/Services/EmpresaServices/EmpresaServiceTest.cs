@@ -18,23 +18,25 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
     {
         private readonly Mock<IEmpresaRepository> _empresaRepository;
         private readonly NotificationContext _notificationContext;
-        private readonly Mock<IValidadorDeCnpj> _validadorDeCnpj;
-        private readonly Mock<IValidadorDeEmpresaDuplicada> _validadorDeEmpresaDuplicada;
-        private readonly Mock<IValidadorDeEmpresaExistente> _validadorDeEmpresaExistente;
+        private readonly IValidadorDeCnpj _validadorDeCnpj;
+        private readonly IValidadorDeEmpresaDuplicada _validadorDeEmpresaDuplicada;
+        private readonly IValidadorDeEmpresaExistente _validadorDeEmpresaExistente;
 
         private readonly ArmazenadorDeEmpresa _armazenadorDeEmpresa;
 
         public EmpresaServiceTest()
         {
-
-            _empresaRepository = new Mock<IEmpresaRepository>();
             _notificationContext = new NotificationContext();
+            _empresaRepository = new Mock<IEmpresaRepository>();
+            _validadorDeCnpj = new ValidadorDeCnpj(_notificationContext);
+            _validadorDeEmpresaDuplicada = new ValidadorDeEmpresaDuplicada(_empresaRepository.Object, _notificationContext);
+            _validadorDeEmpresaExistente = new ValidadorDeEmpresaExistente(_notificationContext);
 
             _armazenadorDeEmpresa = new ArmazenadorDeEmpresa(_empresaRepository.Object,
                 _notificationContext,
-                _validadorDeCnpj.Object,
-                _validadorDeEmpresaDuplicada.Object,
-                _validadorDeEmpresaExistente.Object);
+                _validadorDeCnpj,
+                _validadorDeEmpresaDuplicada,
+                _validadorDeEmpresaExistente);
         }
 
         [Theory(DisplayName = "Inserir empresa nome invalido")]
@@ -120,7 +122,10 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
 
             await _armazenadorDeEmpresa.Armazenar(empresaDto);
 
-            _empresaRepository.Verify(r => r.Add(empresa), Times.Once);
+            _empresaRepository.Verify(r => r.Add(It.Is<Empresa>(emp => 
+                emp.DataFundacao == empresaDto.DataFundacao
+                && emp.Cnpj == empresaDto.Cnpj
+                && emp.Nome == empresaDto.Nome)), Times.Once);
 
             Assert.False(_notificationContext.HasNotifications);
         }

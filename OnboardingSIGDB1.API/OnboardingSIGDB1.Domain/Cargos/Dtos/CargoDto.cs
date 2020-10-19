@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OnboardingSIGDB1.Domain.Dto
+namespace OnboardingSIGDB1.Domain.Cargos.Dtos
 {
     public class CargoDto
     {

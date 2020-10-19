@@ -14,13 +14,7 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
         {
             var funcionarios = new Faker<Funcionario>("pt_BR")
                    .CustomInstantiator(f =>
-                       new Funcionario()
-                       {
-                           Cpf = f.Person.Cpf(includeFormatSymbols: false),
-                           DataContratacao = f.Date.Past(),
-                           Nome = f.Person.FullName,
-                           Id = f.Random.Long(min: 0)
-                       });
+                       new Funcionario(f.Random.Long(min: 1), f.Person.FullName, f.Person.Cpf(includeFormatSymbols: false), f.Date.Past()));
 
             Funcionarios = funcionarios.Generate(quantidade);
         }
@@ -39,7 +33,7 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 
         public FuncionarioBuilder WithId(long id)
         {
-            Funcionario.Id = id;
+            Funcionario.AlterarId(id);
             return this;
         }
 
@@ -92,15 +86,10 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 
         public Funcionario Build()
         {
-            return new Funcionario(Funcionario.Nome,
+            return new Funcionario(Funcionario.Id,
+                Funcionario.Nome,
                 Funcionario.Cpf,
-                Funcionario.DataContratacao)
-            {
-                Id = Funcionario.Id,
-                Empresa = Funcionario.Empresa,
-                EmpresaId = Funcionario.EmpresaId,
-                FuncionarioCargos = Funcionario.FuncionarioCargos
-            };
+                Funcionario.DataContratacao);
         }
 
         public List<Funcionario> BuildList()

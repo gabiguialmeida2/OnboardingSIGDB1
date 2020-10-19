@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using OnboardingSIGDB1.Domain.Dto;
-using OnboardingSIGDB1.Domain.Dto.Filtros;
-using OnboardingSIGDB1.Domain.Entitys;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
+using OnboardingSIGDB1.Domain._Base;
+using OnboardingSIGDB1.Domain.Cargos;
+using OnboardingSIGDB1.Domain.Cargos.Dtos;
+using OnboardingSIGDB1.Domain.Cargos.Services;
+using OnboardingSIGDB1.Domain.Cargos.Specifications;
 
 namespace OnboardingSIGDB1.API.Controllers
 {
@@ -14,20 +14,17 @@ namespace OnboardingSIGDB1.API.Controllers
     [ApiController]
     public class CargoController : ControllerBase
     {
-        private readonly ICargoService _cargoService;
-        private readonly ICargoConsultaService _cargoConsultaService;
-        private readonly ICargoDeleteService _cargoDeleteService;
-        private readonly IMapper _mapper;
+        private readonly IConsultaBase<Cargo, CargoDto> _consultaBase;
+        private readonly ArmazenadorDeCargo _armazenadorDeCargo;
+        private readonly ExclusaoDeCargo _exclusaoDeCargo;
 
-        public CargoController(ICargoService cargoService, 
-            ICargoConsultaService cargoConsultaService, 
-            ICargoDeleteService cargoDeleteService, 
-            IMapper mapper)
+        public CargoController(IConsultaBase<Cargo, CargoDto> consultaBase, 
+            ArmazenadorDeCargo armazenadorDeCargo, 
+            ExclusaoDeCargo exclusaoDeCargo)
         {
-            _cargoService = cargoService;
-            _cargoConsultaService = cargoConsultaService;
-            _cargoDeleteService = cargoDeleteService;
-            _mapper = mapper;
+            _consultaBase = consultaBase;
+            _armazenadorDeCargo = armazenadorDeCargo;
+            _exclusaoDeCargo = exclusaoDeCargo;
         }
 
         /// <summary>
@@ -37,8 +34,10 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var cargos = await _cargoConsultaService.GetAll();
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)),
+            var cargos = _consultaBase.Consultar(ListaCargoSpecificationBuilder.Novo()
+                .Build());
+
+            return Content(JsonConvert.SerializeObject(cargos),
                 "application/json");
         }
 
@@ -49,8 +48,13 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var cargo = await _cargoConsultaService.GetById(id);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<CargoDto>(cargo)),
+            var cargo =  _consultaBase.Consultar(ListaCargoSpecificationBuilder.Novo()
+                .ComId(id)
+                .Build())
+                .Lista
+                .FirstOrDefault();
+
+            return Content(JsonConvert.SerializeObject(cargo),
                 "application/json");
         }
 
@@ -61,8 +65,10 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpGet("pesquisar")]
         public async Task<IActionResult> Get([FromQuery] CargoFiltroDto filtro)
         {
-            var cargos = await _cargoConsultaService.GetFiltro(filtro);
-            return Content(JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CargoDto>>(cargos)),
+            var cargos = _consultaBase.Consultar(ListaCargoSpecificationBuilder.Novo()
+                .ComDescricao(filtro.Descricao)
+                .Build());
+            return Content(JsonConvert.SerializeObject(cargos),
                 "application/json");
         }
 
@@ -73,10 +79,9 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="cargo"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CargoInsertUpdateDto cargo)
+        public async Task<IActionResult> Post([FromBody] CargoDto cargo)
         {
-            var entity = _mapper.Map<Cargo>(cargo);
-            await _cargoService.InsertCargo(entity);
+            await _armazenadorDeCargo.Armazenar(cargo);
             return Ok();
         }
 
@@ -86,10 +91,10 @@ namespace OnboardingSIGDB1.API.Controllers
         /// <param name="id"></param>
         /// <param name="cargo"></param>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CargoInsertUpdateDto cargo)
+        public async Task<IActionResult> Put(long id, [FromBody] CargoDto cargo)
         {
-            var entity = _mapper.Map<Cargo>(cargo);
-            await _cargoService.UpdateCargo(id, entity);
+            cargo.Id = id;
+            await _armazenadorDeCargo.Armazenar(cargo);
             return Ok();
         }
 
@@ -100,7 +105,7 @@ namespace OnboardingSIGDB1.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _cargoDeleteService.Delete(id);
+            await _exclusaoDeCargo.Excluir(id);
             return Ok();
         }
     }

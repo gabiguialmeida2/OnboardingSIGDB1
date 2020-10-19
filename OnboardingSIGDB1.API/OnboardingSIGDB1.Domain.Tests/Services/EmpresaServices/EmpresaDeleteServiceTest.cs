@@ -16,22 +16,25 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.EmpresaServices
     public class EmpresaDeleteServiceTest
     {
         private readonly Mock<IEmpresaRepository> _empresaRepository;
-        private readonly Mock<IValidadorDeEmpresaExistente> _validadorDeEmpresaExistente;
-        private readonly Mock<IValidadorDeEmpresaComFuncionarios> _validadorDeEmpresaComFuncionarios;
+        private readonly IValidadorDeEmpresaExistente _validadorDeEmpresaExistente;
+        private readonly IValidadorDeEmpresaComFuncionarios _validadorDeEmpresaComFuncionarios;
         private readonly NotificationContext _notificationContext;
 
         private readonly ExclusaoDeEmpresa _exclusaoDeEmpresa;
 
         public EmpresaDeleteServiceTest()
         {
+            _notificationContext = new NotificationContext();
+            _validadorDeEmpresaExistente = new ValidadorDeEmpresaExistente(_notificationContext);
+            _validadorDeEmpresaComFuncionarios = new ValidadorDeEmpresaComFuncionarios(_notificationContext);
 
             _empresaRepository = new Mock<IEmpresaRepository>();
-            _notificationContext = new NotificationContext();
+
 
             _exclusaoDeEmpresa = new ExclusaoDeEmpresa(_empresaRepository.Object,
                 _notificationContext,
-                _validadorDeEmpresaExistente.Object,
-                _validadorDeEmpresaComFuncionarios.Object);
+                _validadorDeEmpresaExistente,
+                _validadorDeEmpresaComFuncionarios);
         }
 
         [Fact(DisplayName = "Deletar empresa inexistente")]

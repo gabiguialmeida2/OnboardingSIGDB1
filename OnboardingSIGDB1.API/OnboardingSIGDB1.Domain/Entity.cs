@@ -2,11 +2,11 @@
 using FluentValidation.Results;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OnboardingSIGDB1.Domain.Entitys
+namespace OnboardingSIGDB1.Domain
 {
     public abstract class Entity
     {
-        public long Id { get; set; }
+        public long Id { get; protected set; }
         [NotMapped]
         public bool Valid { get; private set; }
         [NotMapped]
@@ -16,6 +16,11 @@ namespace OnboardingSIGDB1.Domain.Entitys
         {
             ValidationResult = validator.Validate(model);
             return Valid = ValidationResult.IsValid;
+        }
+
+        public void AlterarId(long id)
+        {
+            Id = id;
         }
     }
 }

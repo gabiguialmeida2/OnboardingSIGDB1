@@ -37,6 +37,11 @@ namespace OnboardingSIGDB1.Domain.Empresas
             Nome = nome;
         }
 
+        public void AlterarCnpj(string cnpj)
+        {
+            Cnpj = cnpj;
+        }
+
         public void AlterarDataFundacao(DateTime? dataFuncacao)
         {
             DataFundacao = dataFuncacao;

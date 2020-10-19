@@ -1,9 +1,9 @@
 ﻿using Moq;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Cargos;
+using OnboardingSIGDB1.Domain.Cargos.Services;
+using OnboardingSIGDB1.Domain.Cargos.Validators;
 using OnboardingSIGDB1.Domain.Interfaces;
-using OnboardingSIGDB1.Domain.Interfaces.Services;
 using OnboardingSIGDB1.Domain.Notifications;
-using OnboardingSIGDB1.Domain.Services.CargoServices;
 using OnboardingSIGDB1.Domain.Tests.EntityBuilders;
 using System;
 using System.Collections.Generic;
@@ -15,17 +15,24 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
     public class CargoDeleteServiceTest
     {
         private readonly Mock<ICargoRepository> _cargoRepositoryMock;
+        private readonly IValidadorDeCargoExistente _validadorDeCargoExistente;
+        private readonly IValidadorDeCargoComFuncionarios _validadorDeCargoComFuncionarios;
         private readonly NotificationContext _notificationContext;
 
-        private readonly ICargoDeleteService _cargoDeleteService;
+        private readonly ExclusaoDeCargo _exclusaoDeCargo;
 
         public CargoDeleteServiceTest()
         {
             _cargoRepositoryMock = new Mock<ICargoRepository>();
             _notificationContext = new NotificationContext();
+            _validadorDeCargoExistente = new ValidadorDeCargoExistente(_notificationContext);
+            _validadorDeCargoComFuncionarios = new ValidadorDeCargoComFuncionarios(_notificationContext);
 
-            _cargoDeleteService = new CargoDeleteService(_cargoRepositoryMock.Object,
-                _notificationContext);
+            _exclusaoDeCargo = new ExclusaoDeCargo(_cargoRepositoryMock.Object,
+                _notificationContext,
+                _validadorDeCargoExistente,
+                _validadorDeCargoComFuncionarios
+                );
 
         }
 
@@ -39,7 +46,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
                 .Setup(c => c.GetWithIncludes(It.IsAny<Predicate<Cargo>>()))
                 .ReturnsAsync(new List<Cargo> { entity });
 
-            await _cargoDeleteService.Delete(1);
+            await _exclusaoDeCargo.Excluir(1);
 
             _cargoRepositoryMock.Verify(r => r.Delete(1), Times.Once);
             Assert.False(_notificationContext.HasNotifications);
@@ -49,10 +56,10 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
         public async Task Deletar_Cargo_Inexistente()
         {
             _cargoRepositoryMock
-                .Setup(c => c.Get(It.IsAny<Predicate<Cargo>>()))
+                .Setup(c => c.GetWithIncludes(It.IsAny<Predicate<Cargo>>()))
                 .ReturnsAsync(new List<Cargo> { });
 
-            await _cargoDeleteService.Delete(1);
+            await _exclusaoDeCargo.Excluir(1);
 
             _cargoRepositoryMock.Verify(r => r.Delete(1), Times.Never);
             Assert.True(_notificationContext.HasNotifications);
@@ -71,7 +78,7 @@ namespace OnboardingSIGDB1.Domain.Tests.Services.CargoServices
                 .Setup(c => c.GetWithIncludes(It.IsAny<Predicate<Cargo>>()))
                 .ReturnsAsync(new List<Cargo> { cargo });
 
-            await _cargoDeleteService.Delete(1);
+            await _exclusaoDeCargo.Excluir(1);
 
             Assert.True(_notificationContext.HasNotifications);
             Assert.Contains(_notificationContext.Notifications,

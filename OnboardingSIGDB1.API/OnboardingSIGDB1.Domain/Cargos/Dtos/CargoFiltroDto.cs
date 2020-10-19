@@ -1,4 +1,4 @@
-﻿namespace OnboardingSIGDB1.Domain.Dto.Filtros
+﻿namespace OnboardingSIGDB1.Domain.Cargos.Dtos
 {
     public class CargoFiltroDto
     {

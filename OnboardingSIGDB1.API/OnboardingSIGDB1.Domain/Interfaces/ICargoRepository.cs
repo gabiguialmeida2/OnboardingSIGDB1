@@ -1,4 +1,5 @@
-﻿using OnboardingSIGDB1.Domain.Entitys;
+﻿using OnboardingSIGDB1.Domain.Cargos;
+using OnboardingSIGDB1.Domain.Entitys;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

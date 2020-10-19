@@ -21,6 +21,12 @@ namespace OnboardingSIGDB1.Domain.Entitys
             Validate(this, new FuncionarioValidator());
         }
 
+        public Funcionario(long id, string nome, string cpf, DateTime? dataContratacao) :
+           this(nome, cpf, dataContratacao)
+        {
+            Id = id;
+        }
+
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public DateTime? DataContratacao { get; set; }

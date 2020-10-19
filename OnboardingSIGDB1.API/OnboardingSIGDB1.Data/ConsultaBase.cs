@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 
-namespace OnboardingSIGDB1.Data.Empresas.Consultas
+namespace OnboardingSIGDB1.Data
 {
     public class ConsultaBase<TEntity, TDto>: IConsultaBase<TEntity, TDto>
         where TEntity : class

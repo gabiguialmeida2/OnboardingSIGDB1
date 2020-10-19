@@ -1,4 +1,6 @@
 ﻿using Bogus;
+using OnboardingSIGDB1.Domain.Cargos;
+using OnboardingSIGDB1.Domain.Cargos.Dtos;
 using OnboardingSIGDB1.Domain.Entitys;
 using System.Collections.Generic;
 
@@ -13,10 +15,7 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
         {
             var cargos = new Faker<Cargo>("pt_BR")
                 .CustomInstantiator(f =>
-                    new Cargo(string.Concat(f.Lorem.Letter(10)))
-                    {
-                        Id = f.Random.Long(min: 0)
-                    });
+                    new Cargo(f.Random.Long(min: 1),string.Concat(f.Lorem.Letter(10))));
 
             Cargos = cargos.Generate(quantidade);
         }
@@ -30,13 +29,13 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
 
         public CargoBuilder WithDescricao(string descricao)
         {
-            Cargo.Descricao = descricao;
+            Cargo.AlterarDescricao(descricao);
             return this;
         }
 
         public CargoBuilder WithId(long id)
         {
-            Cargo.Id = id;
+            Cargo.AlterarId(id);
             return this;
         }
 
@@ -58,27 +57,30 @@ namespace OnboardingSIGDB1.Domain.Tests.EntityBuilders
                    {
                        Cargo = Cargo,
                        Funcionario = funcionario
-                   }
-                   );
+                   });
             }
 
-            Cargo.FuncionarioCargos = funcionarioCargos;
+            Cargo.AlterarFuncionariosCargos(funcionarioCargos);
 
             return this;
         }
 
         public Cargo Build()
         {
-            return new Cargo(Cargo.Descricao)
-            {
-                Id = Cargo.Id,
-                FuncionarioCargos = Cargo.FuncionarioCargos
-            };
+            var cargo = new Cargo(Cargo.Descricao);
+            cargo.AlterarId(Cargo.Id);
+            cargo.AlterarFuncionariosCargos(Cargo.FuncionarioCargos);
+            return cargo;
+        }
+
+        public CargoDto BuildDto()
+        {
+            return new CargoDto { Descricao = Cargo.Descricao, Id = Cargo.Id };
         }
 
         public List<Cargo> BuildList()
         {
-            return Cargos; ;
+            return Cargos;
         }
 
     }

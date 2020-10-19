@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OnboardingSIGDB1.Domain.Entitys;
+using OnboardingSIGDB1.Domain.Cargos;
 
-namespace OnboardingSIGDB1.Data.Mappings
+namespace OnboardingSIGDB1.Data.Cursos.Mapping
 {
     public static class CargoMapping
     {
